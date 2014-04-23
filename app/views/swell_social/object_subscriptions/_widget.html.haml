@@ -1,0 +1,6 @@
+- if current_user && sub = current_user.object_subscriptions.active.where( parent_obj_type: parent_obj.class.name, parent_obj_id: parent_obj.id ).first
+	= link_to object_subscription_path( sub.id, format: 'json' ), class: 'nodec tool-tip subscription_widget', data: { method: :delete }, title: 'Unsubscribe', remote: true do
+		%i.fa.fa-star.color-yellow
+- else
+	= link_to object_subscriptions_path( obj_type: parent_obj.class.name, obj_id: parent_obj.id, format: 'json' ), class: 'nodec tool-tip subscription_widget', data: { method: :post }, title:'Keep an eye on this', remote: true do
+		%i.fa.fa-star-o.color-yellow

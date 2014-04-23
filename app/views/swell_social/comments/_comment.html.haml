@@ -1,0 +1,29 @@
+
+.row.comment_block[comment]
+	.col-xs-2.col-md-1
+		= comment.user.avatar_tag( class: 'img-responsive' )
+	.col-xs-10
+		%strong
+			= comment.user
+		= time_ago_in_words( comment.created_at )
+		ago
+		.content{ style: 'padding: 1em;' }
+			- if comment.parent.present?
+				.quoted
+					.quote-head
+						In reply to:
+						%a{ href: profile_path( comment.parent.user ) }
+							= comment.parent.user.avatar_tag( width: 16 )
+							= comment.parent.user
+					.quote-body
+						- if comment.parent.active?
+							= raw comment.parent.content
+						- else
+							&lt;REDACTED&gt;
+			- if comment.content
+				%blockquote.small.color-white
+					= raw comment.content
+		.actions
+			= render 'swell_social/votes/like_widget', parent_obj: comment
+
+

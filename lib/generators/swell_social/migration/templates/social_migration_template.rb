@@ -49,7 +49,7 @@ class SwellSocialMigration < ActiveRecord::Migration
 
 
 		create_table :votes do |t|
-			t.references 		:votable, polymorphic: true
+			t.references 		:parent_obj, polymorphic: true
 			t.references 		:user
 			t.references 		:site
 			t.boolean 			:up, 			default: false # true/false
@@ -59,8 +59,8 @@ class SwellSocialMigration < ActiveRecord::Migration
 			t.timestamps
 		end
 		add_index :votes, :user_id
-		add_index :votes, [ :votable_id, :votable_type ]
-		add_index :votes, [ :votable_id, :votable_type, :context ]
+		add_index :votes, [ :parent_obj_id, :parent_obj_type ]
+		add_index :votes, [ :parent_obj_id, :parent_obj_type, :context ]
 		add_index :votes, [ :user_id, :context ]
 
 

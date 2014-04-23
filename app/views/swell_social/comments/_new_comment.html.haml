@@ -1,0 +1,17 @@
+
+#new_comment
+	- if current_user
+		.row
+			.col-xs-12
+				= form_tag swell_social.comment_on_path( type: parent_obj.class.name, id: parent_obj.id ) do
+
+					= hidden_field_tag :reply_to_id, args[:reply_to]
+					.input-group.input-expandable.t03e
+						%span.input-group-addon
+							%i.fa.fa-comment
+						%span
+							= text_area_tag :content, '', class: 'form-control', placeholder: 'Write a comment'
+						%span.input-group-btn
+							= submit_tag 'Submit', class: 'btn btn-default'
+	- else
+		= render 'application/login_prompt', args: { msg: 'To Comment' }
