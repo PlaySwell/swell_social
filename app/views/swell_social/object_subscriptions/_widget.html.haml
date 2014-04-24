@@ -1,6 +1,8 @@
-- if current_user && sub = current_user.object_subscriptions.active.where( parent_obj_type: parent_obj.class.name, parent_obj_id: parent_obj.id ).first
-	= link_to object_subscription_path( sub.id, format: 'json' ), class: 'nodec tool-tip subscription_widget', data: { method: :delete }, title: 'Unsubscribe', remote: true do
-		%i.fa.fa-star.color-yellow
-- else
-	= link_to object_subscriptions_path( obj_type: parent_obj.class.name, obj_id: parent_obj.id, format: 'json' ), class: 'nodec tool-tip subscription_widget', data: { method: :post }, title:'Keep an eye on this', remote: true do
-		%i.fa.fa-star-o.color-yellow
+
+%span{ style: args[:css_style], id: args[:css_id] || 'subscribe_widget' }
+	- if sub = SwellSocial::ObjectSubscription.active.where( user_id: current_user.try( :id ), parent_obj_type: parent_obj.class.name, parent_obj_id: parent_obj.id ).first
+		= link_to swell_social.object_subscription_path( sub.id ), class: 'subscription-widget', data: { method: :delete }, title: 'Unsubscribe' do
+			%i.fa.fa-star.color-yellow
+	- else
+		= link_to swell_social.object_subscriptions_path( obj_type: parent_obj.class.name, obj_id: parent_obj.id ), class: 'tool-tip subscription-widget', method: :post, title:'Keep an eye on this' do
+			%i.fa.fa-star-o.color-yellow

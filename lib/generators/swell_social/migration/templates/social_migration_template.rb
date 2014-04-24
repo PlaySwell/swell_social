@@ -8,9 +8,9 @@ class SwellSocialMigration < ActiveRecord::Migration
 			t.references		:user
 			t.references		:parent_obj, 			polymorphic: true
 			t.references		:category
-			t.string 			:availability, 			default: :private  	# public for add-to-profile
 			t.string			:format,				default: 'site' 	# email
-			t.string			:status, 				default: :active
+			t.integer			:status, 				default: 0
+			t.integer			:availability, 			default: 0 	# just_me, anyone for add-to-profile
 			t.hstore			:properties
 			t.timestamps
 		end
@@ -38,7 +38,8 @@ class SwellSocialMigration < ActiveRecord::Migration
 			t.integer			:cached_subscribe_count, 		default: 0
 
 			t.float				:computed_score,				default: 0
-			t.string			:status, 						default: :active
+			t.integer			:status, 						default: 0
+			t.integer			:availability, 					default: 0 	# anyone, logged_in, just_me
 			t.datetime 			:modified_at
 			t.hstore			:properties
 			t.timestamps
@@ -52,8 +53,8 @@ class SwellSocialMigration < ActiveRecord::Migration
 			t.references 		:parent_obj, polymorphic: true
 			t.references 		:user
 			t.references 		:site
-			t.boolean 			:up, 			default: false # true/false
-			t.string 			:context,		default: 'like'
+			t.integer 			:val, 			default: 0  # enum -1 down, 1 up
+			t.string 			:context,		default: 'vote'
 			t.text 				:content # in case of comment
 			t.hstore			:properties
 			t.timestamps
