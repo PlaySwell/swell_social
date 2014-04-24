@@ -14,9 +14,6 @@ module SwellSocial
 
 		acts_as_nested_set
 
-		def self.active
-			where( status: :active )
-		end
 
 		def self.within_last( period=1.minute )
 			period_ago = Time.zone.now - period

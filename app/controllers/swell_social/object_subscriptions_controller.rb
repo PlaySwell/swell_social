@@ -8,7 +8,7 @@ module SwellSocial
 			@sub = ObjectSubscription.active.where( user_id: current_user.id, parent_obj_type: params[:obj_type], parent_obj_id: params[:obj_id] ).first_or_initialize
 			if @sub.save
 				@sub.parent_obj.increment!( :cached_subscribe_count )
-				record_user_event( 'subscribe', user: current_user, on: @sub.parent_obj, content: "subscribed to the #{@sub.parent_obj.class.name.downcase} <a href='#{@sub.parent_obj.url}'>#{@sub.parent_obj.to_s}</a>!" ) if defined?( SwellGame )
+				record_user_event( 'subscribe', user: current_user, on: @sub.parent_obj, content: "subscribed to the #{@sub.parent_obj.class.name.downcase} <a href='#{@sub.parent_obj.url}'>#{@sub.parent_obj.to_s}</a>!" ) if defined?( SwellPlay )
 				set_flash "Subscribed"
 			else
 				set_flash "Could not subscribe", :error, @sub

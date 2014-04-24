@@ -9,7 +9,7 @@ module SwellSocial
 
 			if @vote.save
 				@vote.update_parent_caches
-				add_site_event_for( @vote ) if defined?( SwellGame )
+				add_site_event_for( @vote ) if defined?( SwellPlay )
 				redirect_to :back
 			else
 				set_flash 'Vote could not be saved', :error, vote
