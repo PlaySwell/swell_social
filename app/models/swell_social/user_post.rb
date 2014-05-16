@@ -21,6 +21,16 @@ module SwellSocial
 		end
 
 
+
+		def to_s
+			"#{self.user}'s comment on #{self.parent_obj.to_s}"
+		end
+
+		def url
+			self.parent_obj.url
+		end
+
+
 		private
 
 			def check_duplicates

@@ -1,6 +1,6 @@
 
 .row.comment_block[comment]
-	.col-xs-2.col-md-1
+	.col-sm-2
 		= comment.user.avatar_tag( class: 'img-responsive' )
 	.col-xs-10
 		%strong
@@ -24,6 +24,6 @@
 				%blockquote.small.color-white
 					= raw comment.content
 		.actions
-			= render 'swell_social/votes/like_widget', parent_obj: comment
+			= render 'swell_social/votes/widget', parent_obj: comment, args: {}
 
 
