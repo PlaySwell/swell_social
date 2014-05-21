@@ -6,13 +6,13 @@
 				= form_tag swell_social.comment_on_path( type: parent_obj.class.name, id: parent_obj.id ) do
 
 					= hidden_field_tag :reply_to_id, args[:reply_to]
-					.input-group.input-expandable
+					.input-group.form-group
 						%span.input-group-addon
 							= current_user.avatar_tag( width: 20 )
 						%span
 							= text_area_tag :content, '', class: 'form-control', placeholder: 'Write a comment'
-					.input-group-btn
-						= submit_tag 'Submit', class: 'btn btn-default'
+					.form-group
+						.pull-right= submit_tag 'Submit', class: 'btn btn-primary'
 	- else
 		= link_to 'Login', main_app.login_path
 		To Comment

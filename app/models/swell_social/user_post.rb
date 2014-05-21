@@ -26,8 +26,8 @@ module SwellSocial
 			"#{self.user}'s comment on #{self.parent_obj.to_s}"
 		end
 
-		def url
-			self.parent_obj.url
+		def url( args={} )
+			self.parent_obj.url( args ) + "#{self.class_name.to_s}_#{self.id}"
 		end
 
 
