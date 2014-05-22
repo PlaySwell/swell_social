@@ -47,9 +47,9 @@ module SwellSocial
 			def add_site_event_for( vote )
 				if vote.up?
 					if vote.context == 'like'
-						user_event = record_user_event( 'upvote', user: current_user, on: vote.parent_obj, content: "<i class='fa fa-thumbs-up'></i> liked <a href='#{vote.parent_obj.url( ref: current_user )}'>#{vote.parent_obj.to_s}</a>", rate: 1.second )
+						user_event = record_user_event( 'upvote', user: current_user, on: vote.parent_obj, content: "<i class='fa fa-thumbs-up'></i> liked <a href='#{vote.parent_obj.url}'>#{vote.parent_obj.to_s}</a>", rate: 1.second )
 					else
-						user_event = record_user_event( 'upvote', user: current_user, on: vote.parent_obj, content: "<i class='fa fa-arrow-circle-up'></i> up voted <a href='#{vote.parent_obj.url( ref: current_user )}'>#{vote.parent_obj.to_s}</a>", rate: 1.second )
+						user_event = record_user_event( 'upvote', user: current_user, on: vote.parent_obj, content: "<i class='fa fa-arrow-circle-up'></i> up voted <a href='#{vote.parent_obj.url}'>#{vote.parent_obj.to_s}</a>", rate: 1.second )
 					end
 				else # downvote
 					if vote.context == 'like'
