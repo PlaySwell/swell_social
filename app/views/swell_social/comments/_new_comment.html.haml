@@ -14,5 +14,4 @@
 					.form-group
 						.pull-right= submit_tag 'Submit', class: 'btn btn-primary'
 	- else
-		= link_to 'Login', main_app.login_path
-		To Comment
+		= render 'application/login_prompt', args: { msg: 'Login to Comment' }
