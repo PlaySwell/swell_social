@@ -26,6 +26,12 @@ module SwellSocial
 		end
 
 
+
+		def numeric_val
+			self.read_attribute_before_type_cast( :val ).to_i
+		end
+
+
 		def update_parent_caches( args={} )
 			if self.parent_obj.respond_to?( :cached_vote_count )
 
