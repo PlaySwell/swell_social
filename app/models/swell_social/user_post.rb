@@ -27,7 +27,7 @@ module SwellSocial
 		end
 
 		def url( args={} )
-			self.parent_obj.url( args ) + "#{self.class_name.to_s}_#{self.id}"
+			self.parent_obj.url( args ) + "#{self.class.name.to_s}_#{self.id}"
 		end
 
 
