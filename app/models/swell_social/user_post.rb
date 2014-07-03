@@ -34,7 +34,7 @@ module SwellSocial
 		private
 
 			def check_duplicates
-				if UserPost.where( user_id: self.user_id, content: self.content ).within_last( 1.minute ).present?
+				if UserPost.where( user_id: self.user_id, content: self.content ).where('id != ?',self.id).within_last( 1.minute ).present?
 					self.errors.add :content, "Duplicate"
 					return false
 				end
