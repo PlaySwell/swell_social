@@ -12,6 +12,9 @@ module SwellSocial
 		belongs_to :user
 		belongs_to :parent_obj, polymorphic: true
 
+		has_many :taggings, -> { where("taggable_type = ?",UserPost.name) }, class_name: 'SwellMedia::Tagging', foreign_key: 'taggable_id' if defined?( SwellMedia )
+		has_many :tags, class_name: 'SwellMedia::Tag', through: :taggings, source: :tag if defined?( SwellMedia )
+
 		acts_as_nested_set
 
 
