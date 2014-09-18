@@ -7,7 +7,7 @@ module SwellSocial
 		enum status: { 'active' => 0, 'draft' => 1, 'to_moderate' => 1, 'removed' => 2, 'trash' => 3 }
 
 		validate :check_duplicates
-		validates_presence_of 	:content
+		validates_presence_of 	:content, unless: :allow_blank_content
 
 		belongs_to :user
 		belongs_to :parent_obj, polymorphic: true
@@ -39,6 +39,10 @@ module SwellSocial
 					self.errors.add :content, "Duplicate"
 					return false
 				end
+			end
+
+			def allow_blank_content
+				return false
 			end
 	end
 
