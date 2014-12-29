@@ -22,7 +22,7 @@ module SwellSocial
 				set_flash 'Thanks for your comment'
 				
 				# throw site event
-				record_user_event( 'comment', user: current_user, on: @parent_obj, content: "<i class='fa fa-comment'></i> commented on the #{@post.parent_obj.class.name.downcase} <a href='#{@post.parent_obj.url( ref: current_user )}'>#{@post.parent_obj.title}</a>!" ) # if defined?( SwellPlay )
+				record_user_event( 'comment', user: current_user, on: @parent_obj, content: "<i class='fa fa-comment'></i> commented on the #{@post.parent_obj.class.name.downcase} <a href='#{@post.parent_obj.url( ref: current_user )}'>#{@post.parent_obj.title}</a>!" ) if defined?( SwellPlay )
 
 			else
 				set_flash 'Comment could not be saved', :error, @post
