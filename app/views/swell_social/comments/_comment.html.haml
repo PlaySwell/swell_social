@@ -23,7 +23,8 @@
 			- if comment.content
 				%blockquote.small.color-white
 					= raw comment.content
-		.actions
-			= render 'swell_social/votes/widget', parent_obj: comment, args: {}
+		- unless args[:disable_votes]
+			.actions
+				= render 'swell_social/votes/widget', parent_obj: comment, args: {}
 
 
