@@ -4,7 +4,7 @@
 		.row
 			.col-xs-12
 				= form_tag swell_social.comment_on_path( type: parent_obj.class.name, id: parent_obj.id ) do
-
+					= hidden_field_tag :comment_type, args[:comment_type] if args[:comment_type].present?
 					= hidden_field_tag :reply_to_id, args[:reply_to]
 					.input-group.form-group
 						%span.input-group-addon
