@@ -18,6 +18,14 @@ module SwellSocial
 			end
 		end
 
+		def show
+			if params['_method'] && params['_method'].upcase == 'DELETE'
+				destroy()
+			else
+				raise ActionController::RoutingError.new( 'Not Found' )
+			end
+		end
+
 		def destroy
 			@vote = Vote.find( params[:id] )
 			@vote.destroy
