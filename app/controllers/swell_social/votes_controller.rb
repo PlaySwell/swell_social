@@ -2,7 +2,15 @@
 module SwellSocial
 	class VotesController < ApplicationController
 		before_filter :authenticate_user!
-		
+
+		def index
+			if params['_method'] && params['_method'].upcase == 'POST'
+				create()
+			else
+				raise ActionController::RoutingError.new( 'Not Found' )
+			end
+		end
+
 		def create
 			@vote = Vote.where( user_id: current_user.id, parent_obj_type: params[:parent_obj_type], parent_obj_id: params[:parent_obj_id], context: params[:context] ).first_or_initialize
 			@vote.val = params[:val].try( :to_i ) || params[:up].try( :to_i ) || 1
