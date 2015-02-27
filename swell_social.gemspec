@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency "cancan"
   s.add_dependency "devise"
   s.add_dependency "fog"
-  s.add_dependency "friendly_id", '~> 5.0.0'
+  s.add_dependency "friendly_id"
   s.add_dependency "haml"
   s.add_dependency "kaminari"
 	s.add_dependency "pg"
