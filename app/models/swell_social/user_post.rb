@@ -4,7 +4,7 @@ module SwellSocial
 	class UserPost < ActiveRecord::Base
 		self.table_name = 'user_posts'
 
-		enum status: { 'active' => 0, 'draft' => 1, 'to_moderate' => 1, 'removed' => 2, 'trash' => 3 }
+		enum status: { 'to_moderate' => -1, 'draft' => 0, 'active' => 1, 'removed' => 2, 'trash' => 3 }
 
 		validate :check_duplicates
 		validates_presence_of 	:content, unless: :allow_blank_content
