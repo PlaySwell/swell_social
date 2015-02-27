@@ -3,13 +3,13 @@ module SwellSocial
 	class VotesController < ApplicationController
 		before_filter :authenticate_user!
 
-		def index
-			if params['_method'] && params['_method'].upcase == 'POST'
-				create()
-			else
-				raise ActionController::RoutingError.new( 'Not Found' )
-			end
-		end
+		# def index
+		# 	if params['_method'] && params['_method'].upcase == 'POST'
+		# 		create()
+		# 	else
+		# 		raise ActionController::RoutingError.new( 'Not Found' )
+		# 	end
+		# end
 
 		def create
 			@vote = Vote.where( user_id: current_user.id, parent_obj_type: params[:parent_obj_type], parent_obj_id: params[:parent_obj_id], context: params[:context] ).first_or_initialize
@@ -17,7 +17,7 @@ module SwellSocial
 
 			if @vote.save
 				@vote.update_parent_caches
-				add_user_event_for( @vote ) if defined?( SwellPlay )
+				add_user_event_for( @vote )
 				redirect_to :back
 			else
 				set_flash 'Vote could not be saved', :error, vote
@@ -26,13 +26,13 @@ module SwellSocial
 			end
 		end
 
-		def show
-			if params['_method'] && params['_method'].upcase == 'DELETE'
-				destroy()
-			else
-				raise ActionController::RoutingError.new( 'Not Found' )
-			end
-		end
+		# def show
+		# 	if params['_method'] && params['_method'].upcase == 'DELETE'
+		# 		destroy()
+		# 	else
+		# 		raise ActionController::RoutingError.new( 'Not Found' )
+		# 	end
+		# end
 
 		def destroy
 			@vote = Vote.find( params[:id] )
@@ -63,15 +63,15 @@ module SwellSocial
 			def add_user_event_for( vote )
 				if vote.up?
 					if vote.context == 'like'
-						user_event = record_user_event( 'upvote', user: current_user, on: vote.parent_obj, content: "<i class='fa fa-thumbs-up'></i> liked <a href='#{vote.parent_obj.url}'>#{vote.parent_obj.to_s}</a>", rate: 1.second )
+						user_event = record_user_event( 'upvote', on: vote.parent_obj, content: "liked <a href='#{vote.parent_obj.url}'>#{vote.parent_obj.to_s}</a>", rate: 1.second )
 					else
-						user_event = record_user_event( 'upvote', user: current_user, on: vote.parent_obj, content: "<i class='fa fa-arrow-circle-up'></i> up voted <a href='#{vote.parent_obj.url}'>#{vote.parent_obj.to_s}</a>", rate: 1.second )
+						user_event = record_user_event( 'upvote', on: vote.parent_obj, content: "up voted <a href='#{vote.parent_obj.url}'>#{vote.parent_obj.to_s}</a>", rate: 1.second )
 					end
 				else # downvote
 					if vote.context == 'like'
-						user_event = record_user_event( 'downvote', user: current_user, on: vote.parent_obj, content: "disliked <a href='#{vote.parent_obj.url}'>#{vote.parent_obj.to_s}</a>", rate: 1.second )
+						user_event = record_user_event( 'downvote', on: vote.parent_obj, content: "disliked <a href='#{vote.parent_obj.url}'>#{vote.parent_obj.to_s}</a>", rate: 1.second )
 					else
-						user_event = record_user_event( 'downvote', user: current_user, on: vote.parent_obj, content: "down voted <a href='#{vote.parent_obj.url}'>#{vote.parent_obj.to_s}</a>", rate: 1.second )
+						user_event = record_user_event( 'downvote', on: vote.parent_obj, content: "down voted <a href='#{vote.parent_obj.url}'>#{vote.parent_obj.to_s}</a>", rate: 1.second )
 					end
 				end
 			end
