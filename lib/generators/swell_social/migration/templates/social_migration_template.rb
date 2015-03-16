@@ -3,6 +3,17 @@ class SwellSocialMigration < ActiveRecord::Migration
 
 		enable_extension 'hstore'
 
+
+		create_table :notifications do |t|
+			t.references	:user 
+			t.references	:actor
+			t.strign		:title
+			t.text			:content
+			t.integer		:status,		default: 1 # unread, read, archived, trash
+			t.timestamps
+		end
+		add_index :notifications, [ :user_id, :actor_id ]
+		
 		
 		create_table :object_subscriptions do |t|
 			t.references		:user
