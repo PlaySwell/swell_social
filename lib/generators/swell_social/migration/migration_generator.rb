@@ -19,7 +19,7 @@ module SwellSocial
 			end
 
 			def copy_migrations
-				migration_template "social_migration_template.rb", "db/migrate/swell_social_migration.rb"
+				migration_template "swell_social_migration_template.rb", "db/migrate/swell_social_migration.rb"
 			end
 
 		end
