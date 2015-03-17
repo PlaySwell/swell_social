@@ -1,7 +1,7 @@
 module SwellSocial
 	class NotificationService
 
-		def self.notify
+		def self.notifies( args={} )
 			
 		end
 		
