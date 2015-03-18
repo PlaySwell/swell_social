@@ -59,28 +59,35 @@ module SwellSocial
 
 			def send_notification( content, args = {} )
 
-				if self.class.notify_as_method.present?
+				event = args.delete(:event)
 
-					notify_as = self.try( self.class.notify_as_method )
-					notify_as.send_notification( content, args )
+				notify_attributes = self.notify_attributes
 
-				elsif self.class.notify_method.present?
+				qualified_event = ( notify_attributes[:on].nil? || event.nil? || notify_attributes[:on] == event || notify_attributes[:on].include?( event ) )
 
-					notify_attributes = self.notify_attributes
+				recipients = notify_attributes[:recipients]
 
-					event = args.delete(:event)
+				if qualified_event
 
-					recipients = notify_attributes[:recipients]
+					if self.class.notify_as_method.present?
 
-					if recipients.present? && ( notify_attributes[:on].nil? || event.nil? || notify_attributes[:on] == event || notify_attributes[:on].include?( event ) )
+						notify_as = self.try( self.class.notify_as_method )
 
-						#args.merge!( regarding_obj: self )
+						notify_as.send_notification( content, args ) if qualified_event
 
-						NotificationService.notify( recipients, content, args )
+						true
+
+					elsif self.class.notify_method.present?
+
+						NotificationService.notify( recipients, content, args ) if recipients.present? && qualified_event
+
+						true
+
+					else
+
+						false
 
 					end
-
-					true
 
 				else
 
