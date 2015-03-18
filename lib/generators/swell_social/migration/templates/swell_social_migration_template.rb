@@ -4,7 +4,7 @@ class SwellSocialMigration < ActiveRecord::Migration
 		enable_extension 'hstore'
 
 		create_table :notifications do |t|
-			t.references	:user
+			t.references	:user 
 			t.references	:actor
 			t.references 	:user_event  # to help de-dup
 			t.string		:title
