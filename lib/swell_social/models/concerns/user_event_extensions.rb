@@ -1,7 +1,7 @@
 module SwellSocial
 	module Concerns
 
-		module TriggerNotificationConcern
+		module UserEventExtensions
 			extend ActiveSupport::Concern
 
 			included do

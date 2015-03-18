@@ -1,7 +1,7 @@
 module SwellSocial
 	module Concerns
 
-		module NotifyConcern
+		module ActiveRecordBaseExtensions
 			extend ActiveSupport::Concern
 
 			included do
@@ -14,19 +14,19 @@ module SwellSocial
 
 			module ClassMethods
 
-				@@notify_attributes = {}
-				@@notify_method = nil
+				@notify_attributes = {}
+				@notify_method = nil
 
 				def notify_attributes
-					@@notify_attributes
+					@notify_attributes
 				end
 				def notify_method
-					@@notify_method
+					@notify_method
 				end
 
 				def notify( method, args = {} )
-					@@notify_attributes = args
-					@@notify_method = method
+					@notify_attributes = args
+					@notify_method = method
 
 					true
 				end
