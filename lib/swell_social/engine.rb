@@ -7,10 +7,10 @@ module SwellSocial
 	class Engine < ::Rails::Engine
 		isolate_namespace SwellSocial
 
-		ActiveRecord::Base.send :include, SwellSocial::Concerns::ActiveRecordBaseExtensions
+		#ActiveRecord::Base.send :include, SwellSocial::Concerns::ActiveRecordBaseExtensions
 
 		initializer "swell_social.load_helpers" do |app|
-			SwellMedia::UserEvent.send :include, SwellSocial::Concerns::UserEventExtensions
+			#SwellMedia::UserEvent.send :include, SwellSocial::Concerns::UserEventExtensions
 		end
 
 		config.generators do |g|
