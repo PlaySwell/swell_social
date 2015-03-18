@@ -60,6 +60,8 @@ module SwellSocial
 
 					if recipients.present? && ( notify_attributes[:on].nil? || event.nil? || notify_attributes[:on] == event || notify_attributes[:on].include?( event ) )
 
+						#args.merge!( regarding_obj: self )
+
 						NotificationService.notify( recipients, content, args )
 
 					end

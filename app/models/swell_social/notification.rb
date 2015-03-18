@@ -8,6 +8,7 @@ module SwellSocial
 		belongs_to		:user, class_name: SwellMedia.registered_user_class
 		belongs_to		:actor, class_name: SwellMedia.registered_user_class
 		belongs_to		:user_event
+		#belongs_to		:regarding_obj, polymorphic: true
 
 	end
 

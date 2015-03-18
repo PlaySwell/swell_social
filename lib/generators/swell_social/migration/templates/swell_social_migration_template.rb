@@ -12,8 +12,7 @@ class SwellSocialMigration < ActiveRecord::Migration
 			t.integer		:status,		default: 1 # unread, read, archived, trash
 			t.timestamps
 		end
-		add_index :notifications, [ :user_id, :actor_id ]
-		add_index :notifications, [ :user_id, :user_event_id ]
+		add_index :notifications, [ :user_id, :created_at, :status ]
 
 
 		create_table :object_subscriptions do |t|

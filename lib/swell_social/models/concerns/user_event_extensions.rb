@@ -24,7 +24,7 @@ module SwellSocial
 
 					if parent_obj.present? && parent_obj.respond_to?( :send_notification )
 
-						parent_obj.send_notification self.content, event: self.name.to_sym, actor: self.user, user_event: self
+						parent_obj.send_notification self.content, event: self.name.to_sym, actor: self.user, user_event: self #, regarding_obj: self.parent_obj
 
 					end
 
