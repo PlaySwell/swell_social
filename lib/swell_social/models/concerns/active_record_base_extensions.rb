@@ -31,26 +31,40 @@ module SwellSocial
 
 				@notify_attributes = {}
 				@notify_method = nil
+				@notify_as_method = nil
 
 				def notify_attributes
 					@notify_attributes
 				end
+
 				def notify_method
 					@notify_method
+				end
+
+				def notify_as_method
+					@notify_as_method
 				end
 
 				def notify( method, args = {} )
 					@notify_attributes = args
 					@notify_method = method
+				end
 
-					true
+				def notify_as( method, args = {} )
+					@notify_as_method = method
+					@notify_attributes = args
 				end
 
 			end
 
 			def send_notification( content, args = {} )
 
-				if self.class.notify_method.present?
+				if self.class.notify_as_method.present?
+
+					notify_as = self.try( self.class.notify_as_method )
+					notify_as.send_notification( content, args )
+
+				elsif self.class.notify_method.present?
 
 					notify_attributes = self.notify_attributes
 
