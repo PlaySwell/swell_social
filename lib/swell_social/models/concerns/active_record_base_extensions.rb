@@ -52,15 +52,23 @@ module SwellSocial
 
 				if self.class.notify_method.present?
 
-					notify_attributes = self.class.notify_attributes
+					notify_attributes = self.notify_attributes
 
 					event = args.delete(:event)
 
-					if notify_attributes[:recipients].present? && ( notify_attributes[:on].nil? || event.nil? || notify_attributes[:on] == event || notify_attributes[:on].include?( event ) )
+					recipients = notify_attributes[:recipients]
 
-						NotificationService.notify( notify_attributes[:recipients], content, args )
+					if recipients.present? && ( notify_attributes[:on].nil? || event.nil? || notify_attributes[:on] == event || notify_attributes[:on].include?( event ) )
+
+						NotificationService.notify( recipients, content, args )
 
 					end
+
+					true
+
+				else
+
+					false
 
 				end
 
