@@ -6,6 +6,21 @@ module SwellSocial
 
 			included do
 				#scope :disabled, -> { where(disabled: true) }
+				#after_create {
+				#	if self.class.notify_attributes[:create].present?
+				#
+				#		content = self.class.notify_attributes[:create][:content]
+				#		content = self.try( content ) if content.is_a? Symbol
+				#
+				#		title = self.class.notify_attributes[:create][:title]
+				#		title = self.try( title ) if title.is_a? Symbol
+				#
+				#		actor = self.try( self.class.notify_attributes[:create][:actor] ) if self.class.notify_attributes[:create][:title].present?
+				#
+				#		self.send_notification( content, { title: title, actor: actor } )
+				#
+				#	end
+				#}
 			end
 
 
@@ -32,6 +47,25 @@ module SwellSocial
 				end
 
 			end
+
+			def send_notification( content, args = {} )
+
+				if self.class.notify_method.present?
+
+					notify_attributes = self.class.notify_attributes
+
+					event = args.delete(:event)
+
+					if notify_attributes[:recipients].present? && ( notify_attributes[:on].nil? || event.nil? || notify_attributes[:on] == event || notify_attributes[:on].include?( event ) )
+
+						NotificationService.notify( notify_attributes[:recipients], content, args )
+
+					end
+
+				end
+
+			end
+
 
 
 			def notify_attributes

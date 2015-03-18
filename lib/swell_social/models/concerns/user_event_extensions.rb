@@ -22,15 +22,9 @@ module SwellSocial
 
 				begin
 
-					if parent_obj.present? && parent_obj.respond_to?( :notify_attributes )
+					if parent_obj.present? && parent_obj.respond_to?( :send_notification )
 
-						notify_attributes = self.parent_obj.notify_attributes
-
-						if notify_attributes[:recipients].present? && ( notify_attributes[:on].nil? || notify_attributes[:on] == self.name.to_sym || notify_attributes[:on].include?( self.name.to_sym ) )
-
-							NotificationService.notify( notify_attributes[:recipients], self.user, self.content, self )
-
-						end
+						parent_obj.send_notification self.content, event: self.name.to_sym, actor: self.user, user_event: self
 
 					end
 
