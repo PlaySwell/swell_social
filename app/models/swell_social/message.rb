@@ -1,5 +1,5 @@
 module SwellSocial
-	class Message
+	class Message < ActiveRecord::Base
 		self.table_name = 'messages'
 
 		
