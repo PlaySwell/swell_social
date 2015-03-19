@@ -3,16 +3,29 @@ class SwellSocialMigration < ActiveRecord::Migration
 
 		enable_extension 'hstore'
 
+		
+		create_table :messages do |t|
+			t.references	:user
+			t.references	:sender
+			t.string		:title
+			t.text			:content
+			t.integer		:status,		default: 1 # unread, read, archived, trash
+			t.timestamps
+		end
+		add_index :messages, :sender_id
+		add_index :messages, [ :user_id, :status ]
+
 		create_table :notifications do |t|
 			t.references	:user 
 			t.references	:actor
-			t.references 	:user_event  # to help de-dup
+			t.references 	:parent_obj, polymorphic: true  # to help de-dup
 			t.string		:title
 			t.text			:content
 			t.integer		:status,		default: 1 # unread, read, archived, trash
 			t.timestamps
 		end
 		add_index :notifications, [ :user_id, :created_at, :status ]
+		add_index :notifications, [ :user_id, :parent_obj_id, :parent_obj_type ], name: 'idx_notifications_on_parent'
 
 
 		create_table :object_subscriptions do |t|

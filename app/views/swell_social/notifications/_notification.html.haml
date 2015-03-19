@@ -1,7 +1,6 @@
 
 .notification[notification]{ style: 'margin-top:1em;' }
 	- if notification.actor.present?
-		-#%a{ href: user_path( notification.user ) }
 		= notification.actor.avatar_tag( width: 26 )
 		- if notification.actor == current_user
 			You
