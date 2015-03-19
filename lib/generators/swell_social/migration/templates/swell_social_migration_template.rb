@@ -22,6 +22,7 @@ class SwellSocialMigration < ActiveRecord::Migration
 			t.string		:title
 			t.text			:content
 			t.integer		:status,		default: 1 # unread, read, archived, trash
+			t.datetime		:publish_at
 			t.timestamps
 		end
 		add_index :notifications, [ :user_id, :created_at, :status ]
