@@ -10,7 +10,9 @@ module SwellSocial
 		validate :check_duplicates
 		validates_presence_of 	:content
 
-		belongs_to :user
+
+		belongs_to :user, class_name: SwellMedia.registered_user_class
+		belongs_to :actor, class_name: SwellMedia.registered_user_class
 		belongs_to :parent_obj, polymorphic: true
 
 		acts_as_nested_set
