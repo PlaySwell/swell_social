@@ -5,6 +5,7 @@ module SwellSocial
 		self.table_name = 'user_posts'
 
 		enum status: { 'to_moderate' => -1, 'draft' => 0, 'active' => 1, 'removed' => 2, 'trash' => 3 }
+		enum availability: { 'just_me' => 1, 'anyone' => 2 }
 
 		validate :check_duplicates
 		validates_presence_of 	:content
