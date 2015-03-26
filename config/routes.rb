@@ -4,6 +4,8 @@ SwellSocial::Engine.routes.draw do
 
 	resources :discussion_topics, path: :discussions
 
+	resources :notifications
+	
 	resources :object_subscriptions
 
 	resources :user_posts do 

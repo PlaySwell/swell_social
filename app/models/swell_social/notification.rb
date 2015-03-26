@@ -13,8 +13,8 @@ module SwellSocial
 			where( status: [1,2,3] )
 		end
 
-		def unread?
-			super() || unnoticed?
+		def self.not_read
+			where( status: [1,2] )
 		end
 
 		def active?
