@@ -1,6 +1,6 @@
 class SwellSocialMigration < ActiveRecord::Migration
-	# V2.0
-	
+	# V2.1
+
 	def change
 
 		enable_extension 'hstore'
@@ -36,6 +36,7 @@ class SwellSocialMigration < ActiveRecord::Migration
 			t.references		:parent_obj, 			polymorphic: true
 			t.references		:category
 			t.string			:format,				default: 'site' 	# email
+			t.text 				:notification_contexts, array: true, default: []
 			t.integer			:status, 				default: 1
 			t.integer			:availability, 			default: 1 	# just_me, anyone for add-to-profile
 			t.hstore			:properties
@@ -43,7 +44,7 @@ class SwellSocialMigration < ActiveRecord::Migration
 		end
 		add_index :object_subscriptions, :user_id
 		add_index :object_subscriptions, [ :parent_obj_id, :parent_obj_type ]
-
+		
 
 		# base for comments
 		create_table :user_posts do |t|
