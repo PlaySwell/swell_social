@@ -46,8 +46,8 @@ module SwellSocial
 		end
 
 		def update
-			authorize!( :admin, UserPost )
 			@post = UserPost.find( params[:id] )
+			authorize( @post, :admin_update? )
 			if @post.update( comment_params )
 				set_flash "Comment Updated"
 			else
