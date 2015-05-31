@@ -1,26 +1,5 @@
 GIT
-  remote: git://github.com/playswell/swell_media.git
-  revision: 800062ab96cfb46f563be7c034b842d34f2ef157
-  branch: v2
-  specs:
-    swell_media (0.0.1)
-      acts-as-taggable-on
-      awesome_nested_set (~> 3.0.2)
-      browser
-      coffee-rails (~> 4.1.0)
-      devise
-      fastimage
-      fog
-      friendly_id (~> 5.1.0)
-      haml
-      jquery-rails
-      jquery-ui-rails
-      kaminari
-      pg
-      pundit
-      rails (>= 4.2.0)
-      sass-rails (~> 5.0.1)
-      sitemap_generator
+  
 
 PATH
   remote: .

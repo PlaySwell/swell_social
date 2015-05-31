@@ -2,7 +2,11 @@ SwellSocial::Engine.routes.draw do
 	
 	post '/comment_on/:type/:id' => 'user_posts#create', as: 'comment_on'
 
-	resources :discussion_topics, path: :discussions
+	resources :discussions do 
+		resources :topics, controller: :discussion_topics
+	end
+	resources :discussion_posts
+	resources :discussion_admin
 
 	resources :notifications
 	

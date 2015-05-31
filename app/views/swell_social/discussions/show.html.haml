@@ -1,0 +1,19 @@
+.container
+	.row
+		.col-xs-10
+			%h1
+				= @discussion
+		.col-xs-2
+			%a.btn.btn-success{ href: '#new_topic', data: { toggle: :modal, target: '#new_topic' } }
+				%i.fa.fa-plus
+				Post
+	.row
+		.col-xs-12
+			%table.table
+				- @discussion.topics.each do |topic|
+					%tr
+						%td
+							= link_to topic.subject, discussion_topic_path( @discussion, topic )
+
+
+= render 'swell_social/discussion_topics/new_modal'

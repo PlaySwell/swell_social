@@ -1,0 +1,15 @@
+.container
+	.row
+		.col-xs-12
+			%h1
+				Discussions
+
+	.row
+		.col-xs-12
+			%table.table
+				- @discussions.each do |discussion|
+					%tr
+						%td
+							= link_to discussion.title, discussion_path( discussion )
+						%td
+							= discussion.topics.count
