@@ -1,8 +1,12 @@
 .container
 	.row
 		.col-xs-10
-			%h1
-				= @discussion
+			%ol.breadcrumb
+				%li
+					%a{ href: swell_social.discussions_path }
+						Discussions
+				%li
+					= @discussion
 		.col-xs-2
 			%a.btn.btn-success{ href: '#new_topic', data: { toggle: :modal, target: '#new_topic' } }
 				%i.fa.fa-plus
@@ -10,6 +14,12 @@
 	.row
 		.col-xs-12
 			%table.table
+				%thead
+					%th
+					%th By
+					%th Posted
+					%th Replies
+					%th Views
 				- @discussion.topics.each do |topic|
 					%tr
 						%td
@@ -18,9 +28,11 @@
 							by
 							= topic.user
 						%td
-							= topic.created_at
+							= topic.created_at.to_s( :long )
 						%td
 							= topic.posts.count
+						%td
+							= topic.cached_impression_count
 
 
 = render 'swell_social/discussion_topics/new_modal'

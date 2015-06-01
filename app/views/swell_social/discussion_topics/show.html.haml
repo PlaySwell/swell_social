@@ -1,9 +1,23 @@
 .container
-	%h1
-		= @topic.subject
+	.row
+		.col-xs-10
+			%ol.breadcrumb
+				%li
+					%a{ href: swell_social.discussions_path }
+						Discussions
+				%li
+					%a{ href: swell_social.discussion_path( @discussion ) }
+						= @discussion
+				%li
+					= @topic
+		.col-xs-2
+			%a.btn.btn-success{ href: '#new_post', data: { toggle: :modal, target: '#new_post' } }
+				%i.fa.fa-plus
+				Post
+	= render 'swell_social/discussion_topics/topic', topic: @topic, args: {}
 
-	= raw @topic.content
+	- @posts.each do |post|
+		= render 'swell_social/discussion_posts/post', post: post, args: {}
 
-	- @topic.posts.each do |post|
-		.discussion-post
-			= raw post.content
+
+= render 'swell_social/discussion_posts/new_modal'
