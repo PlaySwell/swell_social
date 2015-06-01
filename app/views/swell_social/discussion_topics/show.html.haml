@@ -1,0 +1,9 @@
+.container
+	%h1
+		= @topic.subject
+
+	= raw @topic.content
+
+	- @topic.posts.each do |post|
+		.discussion-post
+			= raw post.content

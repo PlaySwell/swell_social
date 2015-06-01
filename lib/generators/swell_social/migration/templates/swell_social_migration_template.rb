@@ -57,6 +57,7 @@ class SwellSocialMigration < ActiveRecord::Migration
 			t.string 			:slug
 			
 			t.string			:subject
+			t.string			:slug
 			t.text				:content
 
 			t.integer			:cached_vote_count,				default: 0, 	limit: 8
@@ -64,6 +65,8 @@ class SwellSocialMigration < ActiveRecord::Migration
 			t.integer			:cached_upvote_count,			default: 0, 	limit: 8
 			t.integer			:cached_downvote_count,			default: 0, 	limit: 8
 			t.integer			:cached_subscribe_count, 		default: 0
+
+			t.integer			:cached_impression_count, 		default: 0
 
 			t.float				:computed_score,				default: 0
 			t.integer			:status, 						default: 1
@@ -75,6 +78,7 @@ class SwellSocialMigration < ActiveRecord::Migration
 		add_index :user_posts, :user_id
 		add_index :user_posts, [ :parent_obj_id, :parent_obj_type ]
 		add_index :user_posts, :parent_id
+		add_index :user_posts, :slug, unique: true
 
 
 		create_table :votes do |t|

@@ -1,7 +1,6 @@
 module SwellSocial
 	class DiscussionTopic < UserPost
 
-
 		def discussion
 			self.parent_obj
 		end

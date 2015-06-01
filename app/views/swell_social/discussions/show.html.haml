@@ -14,6 +14,13 @@
 					%tr
 						%td
 							= link_to topic.subject, discussion_topic_path( @discussion, topic )
+						%td
+							by
+							= topic.user
+						%td
+							= topic.created_at
+						%td
+							= topic.posts.count
 
 
 = render 'swell_social/discussion_topics/new_modal'
