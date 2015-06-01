@@ -16,19 +16,21 @@
 						%td
 							= link_to discussion.title, discussion_path( discussion )
 						%td
-							= discussion.topics.count
-							Topics
+							= pluralize discussion.total_posts_count, 'Post'
+							in
 							%br
-							= discussion.posts.count
-							Posts
+							= pluralize discussion.topics.count, 'Topic'
+							
 						%td
-							- if discussion.last_post.is_a?( SwellSocial::DiscussionTopic )
-								%a{ href: swell_social.discussion_topic_path( discussion, discussion.last_post, page: discussion.last_post.paginated_page ) }
-									= discussion.last_post.created_at.to_s( :long )
+							- if discussion.last_post.present?
+								%a{ href: discussion.last_post.path }
+									= truncate discussion.last_post.preview
+
+								.small
 									by
 									= discussion.last_post.user
+									at
+									= discussion.last_post.created_at.to_s( :long )
 							- else
-								%a{ href: swell_social.discussion_topic_path( discussion, discussion.last_post.topic, page: discussion.last_post.paginated_page ) }
-									= discussion.last_post.created_at.to_s( :long )
-									by
-									= discussion.last_post.user
+								= "---"
+							

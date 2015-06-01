@@ -18,6 +18,9 @@ module SwellSocial
 		acts_as_nested_set
 		acts_as_taggable
 
+		include FriendlyId
+		friendly_id :slugger, use: :slugged
+
 
 		def self.within_last( period=1.minute )
 			period_ago = Time.zone.now - period
@@ -42,6 +45,10 @@ module SwellSocial
 					self.errors.add :content, "Duplicate"
 					return false
 				end
+			end
+
+			def slugger
+				self.subject.blank? ? self.id : self.subject
 			end
 
 	end

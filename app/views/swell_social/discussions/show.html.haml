@@ -16,23 +16,23 @@
 			%table.table
 				%thead
 					%th
-					%th By
-					%th Posted
-					%th Replies
-					%th Views
+
 				- @discussion.topics.each do |topic|
 					%tr
 						%td
-							= link_to topic.subject, discussion_topic_path( @discussion, topic )
-						%td
-							by
-							= topic.user
-						%td
+							%a{ href: topic.path }
+								= truncate topic.preview
+							= link_to topic.user, topic.user.path
 							= topic.created_at.to_s( :long )
 						%td
-							= topic.posts.count
+							= pluralize topic.posts.count, 'Reply'
+							and
+							= pluralize topic.cached_impression_count, 'View'
 						%td
-							= topic.cached_impression_count
+							Last:
+							= topic.last_post.preview
+							by
+							= link_to topic.last_post.user, topic.last_post.user.path
 
 
 = render 'swell_social/discussion_topics/new_modal'

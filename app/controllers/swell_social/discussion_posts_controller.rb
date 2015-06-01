@@ -4,7 +4,7 @@ module SwellSocial
 
 		def create
 			@topic = DiscussionTopic.active.friendly.find( params[:topic_id] )
-			@post = @topic.posts.new( user: current_user, content: params[:content] )
+			@post = DiscussionPost.new( user: current_user, parent_obj_id: @topic.id, parent_obj_type: @topic.class.name.demodulize, content: params[:content] )
 			if @post.save
 				# TODO throw user_event
 				set_flash "Posted"

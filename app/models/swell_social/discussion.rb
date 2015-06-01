@@ -18,5 +18,9 @@ module SwellSocial
 			DiscussionTopic.where( parent_obj_id: self.id, parent_obj_type: self.class.name.demodulize )
 		end
 
+		def total_posts_count
+			self.topics.count + self.posts.count
+		end
+
 	end
 end

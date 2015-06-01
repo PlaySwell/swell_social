@@ -5,7 +5,7 @@ module SwellSocial
 
 		def create
 			@discussion = Discussion.published.friendly.find( params[:discussion_id] )
-			@topic = @discussion.topics.new( user: current_user, subject: params[:subject], content: params[:content] )
+			@topic = DiscussionTopic.new( user: current_user, parent_obj_id: @discussion.id, parent_obj_type: @discussion.class.name.demodulize, subject: params[:subject], content: params[:content] )
 			if @topic.save
 				# TODO throw user_event
 				set_flash "Topic Posted"
@@ -17,7 +17,7 @@ module SwellSocial
 
 		def show
 			@discussion = Discussion.published.friendly.find( params[:discussion_id] )
-			@topic = @discussion.topics.find( params[:id] )
+			@topic = @discussion.topics.friendly.find( params[:id] )
 			@posts = @topic.posts.active.order( created_at: :desc ).page( params[:page] )
 			record_user_event( :impression, on: @topic, content: "viewed #{@topic}" )
 		end
