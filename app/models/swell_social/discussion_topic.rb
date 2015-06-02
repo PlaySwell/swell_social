@@ -6,7 +6,9 @@ module SwellSocial
 		end
 
 		def last_post
-			self.posts.order( created_at: :desc ).first
+			last = self.posts.order( created_at: :desc ).first
+			# last ||= self
+			return last
 		end
 
 		def paginated_page( dir='asc', per_page=25 ) # todo -- finish implementing reverse
@@ -26,7 +28,7 @@ module SwellSocial
 		end
 
 		def posts
-			DiscussionPost.where( parent_obj_id: self.id, parent_obj_type: self.class.name.demodulize )
+			DiscussionPost.where( parent_obj_id: self.id, parent_obj_type: self.class.name )
 		end
 
 		def preview

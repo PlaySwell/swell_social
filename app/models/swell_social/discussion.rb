@@ -3,7 +3,7 @@ module SwellSocial
 	class Discussion < SwellMedia::Media
 
 		def posts
-			DiscussionPost.where( parent_obj_id: self.topics.pluck( :id ), parent_obj_type: 'DiscussionTopic' )
+			DiscussionPost.where( parent_obj_id: self.topics.pluck( :id ), parent_obj_type: 'SwellSocial::DiscussionTopic' )
 		end
 		
 		def last_post
@@ -15,7 +15,7 @@ module SwellSocial
 		end
 
 		def topics
-			DiscussionTopic.where( parent_obj_id: self.id, parent_obj_type: self.class.name.demodulize )
+			DiscussionTopic.where( parent_obj_id: self.id, parent_obj_type: self.class.name )
 		end
 
 		def total_posts_count

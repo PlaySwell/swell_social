@@ -7,8 +7,10 @@ module SwellSocial
 		enum status: { 'to_moderate' => -1, 'draft' => 0, 'active' => 1, 'removed' => 2, 'trash' => 3 }
 		enum availability: { 'just_me' => 1, 'anyone' => 2 }
 
-		validate :check_duplicates
-		validates_presence_of 	:content
+		validate 				:check_duplicates
+		validates_presence_of 	:content, unless: :allow_blank_content
+
+		attr_accessor	:allow_blank_content
 
 
 		belongs_to :user, class_name: SwellMedia.registered_user_class
@@ -41,7 +43,7 @@ module SwellSocial
 		private
 
 			def check_duplicates
-				if UserPost.where( user_id: self.user_id, content: self.content ).where('id != ?',self.id).within_last( 1.minute ).present?
+				if UserPost.where( parent_obj: self.parent_obj, user_id: self.user_id, content: self.content ).where.not( id: self.id ).within_last( 1.minute ).present?
 					self.errors.add :content, "Duplicate"
 					return false
 				end

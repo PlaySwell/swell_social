@@ -18,7 +18,7 @@ module SwellSocial
 				path += args.map{ |k,v| "#{k}=#{URI.encode(v)}"}.join( '&' )
 			end
 
-			return path
+			return "#{path}#swell_social_discussion_post_#{self.id}"
 		end
 
 		def preview
