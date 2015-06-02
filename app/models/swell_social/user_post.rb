@@ -43,7 +43,7 @@ module SwellSocial
 		private
 
 			def check_duplicates
-				if UserPost.where( parent_obj: self.parent_obj, user_id: self.user_id, content: self.content ).where.not( id: self.id ).within_last( 1.minute ).present?
+				if UserPost.where( parent_obj_id: self.parent_obj_id, parent_obj_type: self.parent_obj.class.name, user_id: self.user_id, content: self.content ).within_last( 1.minute ).present?
 					self.errors.add :content, "Duplicate"
 					return false
 				end
