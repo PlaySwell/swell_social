@@ -29,10 +29,13 @@
 							and
 							= pluralize topic.cached_impression_count, 'View'
 						%td
-							Last:
-							= topic.last_post.preview
-							by
-							= link_to topic.last_post.user, topic.last_post.user.path
+							- if topic.last_post.present?
+								Last:
+								= topic.last_post.preview
+								by
+								= link_to topic.last_post.user, topic.last_post.user.path
+							- else
+								No replies yet.
 
 
 = render 'swell_social/discussion_topics/new_modal'
