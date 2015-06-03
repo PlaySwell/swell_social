@@ -7,7 +7,7 @@ module SwellSocial
 		def create
 			@discussion = Discussion.published.friendly.find( params[:discussion_id] )
 
-			if current_user.role < @discussion.read_attribute_before_type_cast( :availability ).to_i
+			if current_user.read_attribute_before_type_cast( :role ).to_i < @discussion.read_attribute_before_type_cast( :availability ).to_i
 				puts "You don't have permission ot access this discussion"
 				redirect_to :back
 				return false
@@ -26,7 +26,7 @@ module SwellSocial
 		def show
 			@discussion = Discussion.published.friendly.find( params[:discussion_id] )
 
-			if current_user.role < @discussion.read_attribute_before_type_cast( :availability ).to_i
+			if current_user.read_attribute_before_type_cast( :role ).to_i < @discussion.read_attribute_before_type_cast( :availability ).to_i
 				puts "You don't have permission ot access this discussion"
 				redirect_to :back
 				return false
