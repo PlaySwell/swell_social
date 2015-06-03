@@ -6,6 +6,13 @@ module SwellSocial
 
 		def create
 			@discussion = Discussion.published.friendly.find( params[:discussion_id] )
+
+			if current_user.role < @discussion.read_attribute_before_type_cast( :availability ).to_i
+				puts "You don't have permission ot access this discussion"
+				redirect_to :back
+				return false
+			end
+
 			@topic = DiscussionTopic.new( user: current_user, parent_obj_id: @discussion.id, parent_obj_type: @discussion.class.name, subject: params[:subject], content: params[:content] )
 			if @topic.save
 				record_user_event( :discussion_topic, on: @topic, content: "posted the topic: #{@topic.preview} in the discussion: #{@discussion.title}." )
@@ -18,6 +25,13 @@ module SwellSocial
 
 		def show
 			@discussion = Discussion.published.friendly.find( params[:discussion_id] )
+
+			if current_user.role < @discussion.read_attribute_before_type_cast( :availability ).to_i
+				puts "You don't have permission ot access this discussion"
+				redirect_to :back
+				return false
+			end
+
 			@topic = @discussion.topics.friendly.find( params[:id] )
 			@posts = @topic.posts.active.order( created_at: :asc ).page( params[:page] )
 			record_user_event( :impression, on: @topic, content: "viewed #{@topic}" )
