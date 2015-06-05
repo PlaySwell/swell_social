@@ -18,7 +18,7 @@
 							.small
 								= raw discussion.description
 						%td
-							= pluralize discussion.total_posts_count, 'Post'
+							= pluralize discussion.posts.count, 'Post'
 							in
 							%br
 							= pluralize discussion.topics.count, 'Topic'

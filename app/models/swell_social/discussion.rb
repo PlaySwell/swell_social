@@ -2,24 +2,24 @@
 module SwellSocial
 	class Discussion < SwellMedia::Media
 
+		def all_posts
+			self.posts + self.topics
+		end
+
 		def posts
-			DiscussionPost.where( parent_obj_id: self.topics.pluck( :id ), parent_obj_type: 'SwellSocial::DiscussionTopic' )
+			DiscussionPost.active.where( parent_obj_id: self.topics.pluck( :id ), parent_obj_type: 'SwellSocial::DiscussionTopic' )
 		end
 		
 		def last_post
-			if self.posts.active.present?
-				self.posts.active.order( created_at: :desc ).first
-			else
-				self.topics.active.order( created_at: :desc ).first
-			end
+			self.all_posts.sort{ |p| p.created_at.to_i }.first
 		end
 
 		def topics
-			DiscussionTopic.where( parent_obj_id: self.id, parent_obj_type: self.class.name )
+			DiscussionTopic.active.where( parent_obj_id: self.id, parent_obj_type: self.class.name )
 		end
 
 		def total_posts_count
-			self.topics.count + self.posts.count
+			self.all_posts.count
 		end
 
 	end
