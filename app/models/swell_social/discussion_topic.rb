@@ -6,7 +6,7 @@ module SwellSocial
 		end
 
 		def last_post
-			last = self.posts.order( created_at: :desc ).first
+			last = self.posts.order( created_at: :desc ).last
 			last ||= self
 			return last
 		end

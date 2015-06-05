@@ -33,7 +33,7 @@ module SwellSocial
 			end
 
 			@topic = @discussion.topics.friendly.find( params[:id] )
-			@posts = @topic.posts.active.order( created_at: :asc ).page( params[:page] )
+			@posts = @topic.posts.active.order( created_at: :desc ).page( params[:page] )
 			record_user_event( :impression, on: @topic, content: "viewed #{@topic}" )
 		end
 
