@@ -11,7 +11,7 @@ module SwellSocial
 		end
 		
 		def last_post
-			self.all_posts.sort{ |p| p.created_at.to_i }.first
+			self.all_posts.sort{ |p| p.created_at.to_i }.last
 		end
 
 		def topics
