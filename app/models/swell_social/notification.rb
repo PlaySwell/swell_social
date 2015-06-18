@@ -8,6 +8,7 @@ module SwellSocial
 		belongs_to		:user, class_name: SwellMedia.registered_user_class
 		belongs_to		:actor, class_name: SwellMedia.registered_user_class
 		belongs_to		:parent_obj, polymorphic: true
+		belongs_to		:activity_obj, polymorphic: true
 
 		def self.active
 			where( status: [1,2,3] )

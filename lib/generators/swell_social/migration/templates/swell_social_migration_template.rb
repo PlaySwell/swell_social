@@ -21,6 +21,7 @@ class SwellSocialMigration < ActiveRecord::Migration
 			t.references	:user 
 			t.references	:actor
 			t.references 	:parent_obj, polymorphic: true  # to help de-dup
+			t.references 	:activity_obj, polymorphic: true
 			t.string			:title
 			t.text				:content
 			t.integer			:status,		default: 1 # hidden, unread, read, archived, trash,
@@ -38,6 +39,7 @@ class SwellSocialMigration < ActiveRecord::Migration
 		add_index :notifications, [:user_id, :action, :children_count, :status, :created_at], name: 'idx_notifications_user_action_count_status'
 		add_index :notifications, [:action, :children_count, :status, :parent_obj_type, :created_at, :parent_obj_id], name: 'idx_notifications_action_count_status_parent_obj'
 		add_index :notifications, [:user_id, :action, :children_count, :status, :parent_obj_type, :created_at, :parent_obj_id], name: 'idx_notifications_user_action_count_status_parent_obj'
+		add_index :notifications, [:activity_obj_id, :activity_obj_type, :user_id, :parent_obj_id, :parent_obj_type], name: 'idx_notifications_on_activity'
 
 
 		create_table :object_subscriptions do |t|
