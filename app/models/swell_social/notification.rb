@@ -3,6 +3,8 @@ module SwellSocial
 	class Notification < ActiveRecord::Base
 		self.table_name = 'notifications'
 
+		acts_as_nested_set
+
 		enum status: { 'hidden' => 0, 'unnoticed' => 1, 'unread' => 2, 'read' => 3, 'archived' => 4, 'trash' => 5 }
 
 		belongs_to		:user, class_name: SwellMedia.registered_user_class
