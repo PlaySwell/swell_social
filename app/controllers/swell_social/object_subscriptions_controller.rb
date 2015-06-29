@@ -6,6 +6,7 @@ module SwellSocial
 
 		def create
 			@sub = ObjectSubscription.where( user_id: current_user.id, parent_obj_type: params[:obj_type], parent_obj_id: params[:obj_id] ).first_or_initialize
+			@button_class = params[:button_class]
 
 		    respond_to do |format|
 		      if @sub.active!
@@ -24,7 +25,8 @@ module SwellSocial
 
 		def destroy
 			@sub = ObjectSubscription.active.where( user_id: current_user.id ).find_by( id: params[:id] )
-			
+			@button_class = params[:button_class]
+
 			respond_to do |format|
 				if @sub.deleted!
 					@sub.parent_obj.decrement!( :cached_subscribe_count ) if @sub.parent_obj.respond_to?( :cached_subscribe_count )
