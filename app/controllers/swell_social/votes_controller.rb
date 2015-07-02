@@ -17,7 +17,7 @@ module SwellSocial
 
 			if @vote.save
 				@vote.update_parent_caches
-				add_user_event_for( @vote )
+				#add_user_event_for( @vote )
 				redirect_to :back
 			else
 				set_flash 'Vote could not be saved', :error, vote
@@ -52,7 +52,7 @@ module SwellSocial
 				@vote.val = dir
 			end
 			if @vote.save
-				add_site_event_for( @vote )
+				#add_site_event_for( @vote )
 				@vote.update_parent_caches( dir: dir )
 			end
 			redirect_to :back
