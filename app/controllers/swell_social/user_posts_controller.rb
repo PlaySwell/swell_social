@@ -14,21 +14,25 @@ module SwellSocial
 
 		def create
 			@post = UserPost.new( type: params[:comment_type], parent_obj_id: @parent_obj.id, parent_obj_type: @parent_obj.class.name, user: current_user, subject: params[:subject], content: params[:content], status: ( params[:draft] ? 'draft' : 'active' ) )
-
-			if @post.save
-				if @reply_to_comment = UserPost.find_by( id: params[:reply_to_id] )
-					@post.move_to_child_of( @reply_to_comment )
+			@list = List.active.friendly.find( @parent_obj.id )
+			
+			respond_to do |format|
+				if @post.save
+					if @reply_to_comment = UserPost.find_by( id: params[:reply_to_id] )
+						@post.move_to_child_of( @reply_to_comment )
+					end
+					
+					# throw site event
+					record_user_event( 'comment', on: @parent_obj, content: "commented on the #{@post.parent_obj.class.name.downcase} <a href='#{@post.parent_obj.url}'>#{@post.parent_obj.title}</a>!" )
+					format.html { redirect_to(:back, set_flash: 'Thanks for your comment') }
+					format.js {}
+				else
+					format.html { redirect_to(:back, set_flash: 'Comment could not be saved') }
+					format.js {}
 				end
-				set_flash 'Thanks for your comment'
-				
-				# throw site event
-				record_user_event( 'comment', on: @parent_obj, content: "commented on the #{@post.parent_obj.class.name.downcase} <a href='#{@post.parent_obj.url}'>#{@post.parent_obj.title}</a>!" )
-
-			else
-				set_flash 'Comment could not be saved', :error, @post
 			end
 
-			redirect_to :back
+			# redirect_to :back
 		end
 
 		def destroy
