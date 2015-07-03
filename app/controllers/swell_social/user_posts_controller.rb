@@ -52,12 +52,17 @@ module SwellSocial
 		def update
 			@post = UserPost.find( params[:id] )
 			authorize( @post, :admin_update? )
-			if @post.update( comment_params )
-				set_flash "Comment Updated"
-			else
-				set_flash "Comment could not be updated", :error, @post
+
+			respond_to do |format|
+				if @post.update( comment_params )
+					format.html { redirect_to(:back, set_flash: 'Comment updated') }
+					format.js {}
+				else
+					format.html { redirect_to(:back, set_flash: 'Comment could not be updated') }
+					format.js {}
+				end
 			end
-			redirect_to :back
+
 		end
 
 
