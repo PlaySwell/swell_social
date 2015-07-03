@@ -35,32 +35,15 @@ module SwellSocial
 		def update_parent_caches( args={} )
 			if self.parent_obj.respond_to?( :cached_vote_count )
 
-				if Vote.by_object( self.parent_obj ).count == 0
-					score = 0
-				else
-					score = Vote.by_object( self.parent_obj ).up.count / Vote.by_object( self.parent_obj ).count
-				end
+				upvotes = Vote.by_object( self.parent_obj ).up.count
+				downvotes = Vote.by_object( self.parent_obj ).down.count
+				totalvotes = upvotes + downvotes
 
-				updates = { cached_vote_count: Vote.by_object( self.parent_obj ).count, cached_vote_score: score }
+				score = upvotes.to_f
+				score = upvotes / totalvotes if totalvotes > 0
 
-				if args[:dir] == 'up'
-					# we're flipping, so remove old downvote
-					updates.merge!( cached_downvote_count: parent_obj.cached_downvote_count - 1 )
-				elsif args[:dir] == 'down'
-					# flipping to down, remove old upvote
-					updates.merge!( cached_upvote_count: parent_obj.cached_upvote_count - 1 )
-				end
-
-				if not( self.persisted? )
-					# vote was deleted, decrement appropriate count
-					if self.up?
-						updates.merge!( cached_upvote_count: parent_obj.cached_upvote_count - 1 )
-					else
-						updates.merge!( cached_downvote_count: parent_obj.cached_downvote_count - 1 )
-					end
-				end
-
-				self.parent_obj.update( updates )	
+				#puts "update_parent_caches(#{self.parent_obj}) #{{cached_vote_count: totalvotes, cached_vote_score: score, cached_downvote_count: downvotes, cached_upvote_count: upvotes}.to_json}"
+				self.parent_obj.update( cached_vote_count: totalvotes, cached_vote_score: score, cached_downvote_count: downvotes, cached_upvote_count: upvotes )
 
 			end
 		end
