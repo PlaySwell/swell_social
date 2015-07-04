@@ -2,7 +2,7 @@
 module SwellSocial
 	class DiscussionTopicsController < ApplicationController
 
-		before_filter :authenticate_user!
+		before_filter :authenticate_user!, except: :show
 
 		def create
 			@discussion = Discussion.published.friendly.find( params[:discussion_id] )
