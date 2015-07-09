@@ -1,0 +1,1 @@
+$('#swell_social_comment_#{@post.id}').replaceWith("#{j render(partial: 'user_posts/comment', locals: {user_post: @post, args: { reply_to: current_user.id, placeholder: 'Write a reply'}})}");
