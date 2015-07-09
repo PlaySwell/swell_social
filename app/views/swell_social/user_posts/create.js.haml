@@ -5,7 +5,7 @@ $('#first-comment-header').hide();
 - else
 	$('#comments').prepend("#{j render(partial: 'user_posts/comment', locals: { parent_obj: @parent_obj, user_post: @post, args: { reply_to: current_user.id, placeholder: 'Write a reply'}})}");
 
-$('#new-comment-form#{params[:reply_to_id]}').html("#{j render(partial: 'user_posts/comment_form', locals: {parent_obj: @parent_obj, args: { reply_to: params[:reply_to_id], placeholder: 'Thanks for your comment!'}})}");
+$('#new-comment-form#{params[:reply_to_id]}').html("#{j render(partial: 'user_posts/comment_form', locals: {parent_obj: @parent_obj, args: { position: params[:position], reply_to: params[:reply_to_id], placeholder: 'Thanks for your comment!'}})}");
 
 $('#comment-reply-#{params[:reply_to_id]}').removeClass('in');
 
