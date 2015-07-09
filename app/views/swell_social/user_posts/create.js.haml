@@ -9,5 +9,7 @@ $('#new-comment-form#{params[:reply_to_id]}').html("#{j render(partial: 'user_po
 
 $('#comment-reply-#{params[:reply_to_id]}').removeClass('in');
 
-- unless params[:position] == 'append'
+- if params[:position] == 'append'
+	$('html, body').animate({ scrollTop: $('#new-comment-form').offset().top + $('#new-comment-form').height() - $( window ).height() + 100}, 1000);
+- else
 	$('html, body').animate({ scrollTop: $('#comments').offset().top - 100}, 1000);
