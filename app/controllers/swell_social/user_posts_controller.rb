@@ -14,7 +14,6 @@ module SwellSocial
 
 		def create
 			@post = UserPost.new( type: params[:comment_type], parent_obj_id: @parent_obj.id, parent_obj_type: @parent_obj.class.name, user: current_user, subject: params[:subject], content: params[:content], status: ( params[:draft] ? 'draft' : 'active' ) )
-			@list = List.active.friendly.find( @parent_obj.id )
 
 			respond_to do |format|
 				if @post.save
