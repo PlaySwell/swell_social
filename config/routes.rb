@@ -16,6 +16,6 @@ SwellSocial::Engine.routes.draw do
 		get :admin, on: :collection
 	end
 
-	resources :votes
+	resources :votes, only: [:create, :destroy, :update]
 
 end
