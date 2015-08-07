@@ -3,6 +3,7 @@ module SwellSocial
 
 	class UserPost < ActiveRecord::Base
 		self.table_name = 'user_posts'
+		include SwellMedia::Concerns::TagArrayConcern
 
 		enum status: { 'to_moderate' => -1, 'draft' => 0, 'active' => 1, 'removed' => 2, 'trash' => 3 }
 		enum availability: { 'just_me' => 1, 'anyone' => 2 }
@@ -19,6 +20,7 @@ module SwellSocial
 
 		acts_as_nested_set
 		acts_as_taggable
+		acts_as_taggable_array_on :tmp_tags
 
 		include FriendlyId
 		friendly_id :slugger, use: :slugged

@@ -84,12 +84,14 @@ class SwellSocialMigration < ActiveRecord::Migration
 			t.integer			:availability, 					default: 1 	# anyone, logged_in, just_me
 			t.datetime 			:modified_at
 			t.hstore			:properties
+			t.string 			:tags, array: true, default: '{}'
 			t.timestamps
 		end
 		add_index :user_posts, :user_id
 		add_index :user_posts, [ :parent_obj_id, :parent_obj_type ]
 		add_index :user_posts, :parent_id
 		add_index :user_posts, :slug, unique: true
+		add_index :user_posts, :tags, using: 'gin'
 
 
 		create_table :votes do |t|
