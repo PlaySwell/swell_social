@@ -19,8 +19,7 @@ module SwellSocial
 		belongs_to :parent_obj, polymorphic: true
 
 		acts_as_nested_set
-		acts_as_taggable
-		acts_as_taggable_array_on :tmp_tags
+		acts_as_taggable_array_on :tags
 
 		include FriendlyId
 		friendly_id :slugger, use: :slugged
