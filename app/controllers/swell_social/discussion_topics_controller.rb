@@ -15,7 +15,7 @@ module SwellSocial
 
 			@topic = DiscussionTopic.new( user: current_user, parent_obj_id: @discussion.id, parent_obj_type: @discussion.class.name, subject: params[:subject], content: params[:content] )
 			if @topic.save
-				record_user_event( :discussion_topic, on: @topic, content: "posted the topic: #{@topic.preview} in the discussion: #{@discussion.title}." )
+				record_user_event( on: @discussion, obj: @topic, content: "posted the topic: #{@topic.preview} in the discussion: #{@discussion.title}." )
 				set_flash "Topic Posted"
 			else
 				set_flash "Couldn't create Topic", :danger, @topic

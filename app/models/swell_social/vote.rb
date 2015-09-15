@@ -40,9 +40,8 @@ module SwellSocial
 				totalvotes = upvotes + downvotes
 
 				score = upvotes.to_f
-				score = upvotes / totalvotes if totalvotes > 0
+				score = upvotes.to_f / totalvotes if totalvotes > 0
 
-				#puts "update_parent_caches(#{self.parent_obj}) #{{cached_vote_count: totalvotes, cached_vote_score: score, cached_downvote_count: downvotes, cached_upvote_count: upvotes}.to_json}"
 				self.parent_obj.update( cached_vote_count: totalvotes, cached_vote_score: score, cached_downvote_count: downvotes, cached_upvote_count: upvotes )
 
 			end

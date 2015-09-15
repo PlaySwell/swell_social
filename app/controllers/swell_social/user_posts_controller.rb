@@ -22,7 +22,7 @@ module SwellSocial
 					end
 					
 					# throw site event
-					record_user_event( 'comment', on: @parent_obj, content: "commented on the #{@post.parent_obj.class.name.downcase} <a href='#{@post.parent_obj.url}'>#{@post.parent_obj.title}</a>!" )
+					record_user_event( event: 'comment', obj: @post, on: @parent_obj, content: "commented on the #{@post.parent_obj.class.name.downcase} <a href='#{@post.parent_obj.url}'>#{@post.parent_obj.try( :title ) }</a>!" )
 					format.html { redirect_to(:back, set_flash: 'Thanks for your comment') }
 					format.js {}
 				else

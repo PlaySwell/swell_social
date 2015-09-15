@@ -8,7 +8,7 @@ module SwellSocial
 			@topic = DiscussionTopic.active.friendly.find( params[:topic_id] )
 			@post = DiscussionPost.new( user: current_user, parent_obj_id: @topic.id, parent_obj_type: @topic.class.name, content: params[:content] )
 			if @post.save
-				record_user_event( :discussion_post, on: @post, content: "replied to the topic: #{@topic.preview}." )
+				record_user_event( on: @topic, obj: @post, content: "posted to the topic: #{@topic.preview}." )
 				set_flash "Posted"
 			else
 				set_flash "Couldn't create Post", :danger, @post
