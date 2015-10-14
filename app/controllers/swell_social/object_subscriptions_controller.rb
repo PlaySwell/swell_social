@@ -39,6 +39,26 @@ module SwellSocial
 
 		end
 
+
+		def index
+			# stupid monkey-patch to allow GET method requests to work when JS is not initialized
+			# just a clone of create with corresponding index.js partial
+			@sub = ObjectSubscription.where( user_id: current_user.id, parent_obj_type: params[:obj_type], parent_obj_id: params[:obj_id] ).first_or_initialize
+			@button_class = params[:button_class]
+			
+			respond_to do |format|
+			  if @sub.active!
+				record_user_event( event: "subscribe", on: @sub.parent_obj, content: "subscribed to the #{@sub.parent_obj.class.name.downcase} <a href='#{@sub.parent_obj.try(:url)}'>#{@sub.parent_obj.to_s}</a>!" )
+				format.html { redirect_to(:back, set_flash: 'Subscribed') }
+				format.js {}
+			  else
+				format.html { redirect_to(:back, set_flash: 'Error') }
+				format.js {}
+			  end
+			end
+
+		end
+
 	end
 
 end
