@@ -14,6 +14,8 @@ module SwellSocial
 
 		def create
 			@post = UserPost.new( type: params[:comment_type], parent_obj_id: @parent_obj.id, parent_obj_type: @parent_obj.class.name, user: current_user, subject: params[:subject], content: params[:content], status: ( params[:draft] ? 'draft' : 'active' ) )
+			@context_selector = ''
+			@context_selector = "#{params[:context_selector]} " if params[:context_selector].present?
 
 			respond_to do |format|
 				if @post.save
@@ -50,6 +52,9 @@ module SwellSocial
 
 		def update
 			@post = UserPost.find( params[:id] )
+			@context_selector = ''
+			@context_selector = "#{params[:context_selector]} " if params[:context_selector].present?
+
 			authorize( @post, :admin_update? )
 
 			respond_to do |format|
