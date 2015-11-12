@@ -27,7 +27,7 @@ module SwellSocial
 			@button_class = params[:button_class]
 
 			respond_to do |format|
-				if @sub.delete
+				if @sub.present? && @sub.delete
 					record_user_event( event: "unsubscribe", user: current_user, on: @sub.parent_obj, content: "unsubscribed from the #{@sub.parent_obj.class.name.downcase} <a href='#{@sub.parent_obj.try(:url)}'>#{@sub.parent_obj.to_s}</a>!" )
 					format.html { redirect_to(:back, set_flash: 'Unsubscribed') }
 					format.js {}
