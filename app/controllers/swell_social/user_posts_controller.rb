@@ -17,6 +17,8 @@ module SwellSocial
 			@context_selector = ''
 			@context_selector = "#{params[:context_selector]} " if params[:context_selector].present?
 
+			@post.mentions = @post.content.scan(/\B(@[a-z0-9_-]+)/i).collect(&:first).uniq if @post.respond_to?(:mentions) && @post.content.present?
+
 			respond_to do |format|
 				if @post.save
 					if @reply_to_comment = UserPost.find_by( id: params[:reply_to_id] )
@@ -55,10 +57,13 @@ module SwellSocial
 			@context_selector = ''
 			@context_selector = "#{params[:context_selector]} " if params[:context_selector].present?
 
+			updated_attributes = comment_params
+			updated_attributes[:mentions] = @post.content.scan(/\B(@[a-z0-9_-]+)/i).collect(&:first).uniq if @post.respond_to?(:mentions) && @post.content.present?
+
 			authorize( @post, :admin_update? )
 
 			respond_to do |format|
-				if @post.update( comment_params )
+				if @post.update( updated_attributes )
 					format.html { redirect_to(:back, set_flash: 'Comment updated') }
 					format.js {}
 				else

@@ -85,6 +85,7 @@ class SwellSocialMigration < ActiveRecord::Migration
 			t.datetime 			:modified_at
 			t.hstore			:properties
 			t.string 			:tags, array: true, default: '{}'
+			t.string 			:mentions, array: true, default: '{}'
 			t.timestamps
 		end
 		add_index :user_posts, :user_id
@@ -92,6 +93,9 @@ class SwellSocialMigration < ActiveRecord::Migration
 		add_index :user_posts, :parent_id
 		add_index :user_posts, :slug, unique: true
 		add_index :user_posts, :tags, using: 'gin'
+		add_index :user_posts, [:created_at, :mentions]
+		add_index :user_posts, [:updated_at, :mentions]
+		add_index :user_posts, :mentions, using: 'gin'
 
 
 		create_table :votes do |t|
