@@ -17,7 +17,7 @@ module SwellSocial
 			@context_selector = ''
 			@context_selector = "#{params[:context_selector]} " if params[:context_selector].present?
 
-			@post.mentions = ( sanitize(@post.content, tags: %w()) || '' ).scan(/\B(@[a-z0-9_-]+)/i).collect(&:first).uniq if @post.respond_to?(:mentions) && @post.content.present?
+			@post.mentions = ( ActionController::Base.helpers.sanitize(@post.content || '', tags: %w()) || '' ).scan(/\B(@[a-z0-9_-]+)/i).collect(&:first).uniq if @post.respond_to?(:mentions) && @post.content.present?
 
 			respond_to do |format|
 				if @post.save
@@ -58,7 +58,7 @@ module SwellSocial
 			@context_selector = "#{params[:context_selector]} " if params[:context_selector].present?
 
 			updated_attributes = comment_params
-			updated_attributes[:mentions] = ( sanitize(@post.content, tags: %w()) || '' ).scan(/\B(@[a-z0-9_-]+)/i).collect(&:first).uniq if @post.respond_to?(:mentions) && @post.content.present?
+			updated_attributes[:mentions] = ( ActionController::Base.helpers.sanitize(@post.content || '', tags: %w()) || '' ).scan(/\B(@[a-z0-9_-]+)/i).collect(&:first).uniq if @post.respond_to?(:mentions) && @post.content.present?
 
 			authorize( @post, :admin_update? )
 
