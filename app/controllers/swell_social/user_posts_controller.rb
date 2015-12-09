@@ -17,10 +17,10 @@ module SwellSocial
 			@context_selector = ''
 			@context_selector = "#{params[:context_selector]} " if params[:context_selector].present?
 
-			@post.mentions = ( ActionController::Base.helpers.sanitize(@post.content || '', tags: %w()) || '' ).scan(/\B(@[a-z0-9_-]+)/i).collect(&:first).uniq if @post.respond_to?(:mentions) && @post.content.present?
 
 			respond_to do |format|
 				if @post.save
+					SwellSocial::UserPostWorker.perform_async_if_possible( @post.id )
 					if @reply_to_comment = UserPost.find_by( id: params[:reply_to_id] )
 						@post.move_to_child_of( @reply_to_comment )
 					end
@@ -57,13 +57,11 @@ module SwellSocial
 			@context_selector = ''
 			@context_selector = "#{params[:context_selector]} " if params[:context_selector].present?
 
-			updated_attributes = comment_params
-			updated_attributes[:mentions] = ( ActionController::Base.helpers.sanitize(@post.content || '', tags: %w()) || '' ).scan(/\B(@[a-z0-9_-]+)/i).collect(&:first).uniq if @post.respond_to?(:mentions) && @post.content.present?
-
 			authorize( @post, :admin_update? )
 
 			respond_to do |format|
-				if @post.update( updated_attributes )
+				if @post.update( comment_params )
+					SwellSocial::UserPostWorker.perform_async_if_possible( @post.id )
 					format.html { redirect_to(:back, set_flash: 'Comment updated') }
 					format.js {}
 				else
