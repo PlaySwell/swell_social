@@ -1,5 +1,5 @@
 - if @sub.nil?
-	$('#sub-'+#{@sub.parent_obj_id}).html('<i class="fa fa-eye-slash"></i>Unfollow');
+	$('#sub-'+#{@sub_id}).html('<i class="fa fa-eye-slash"></i>Unfollow');
 - elsif @sub.errors.count > 0
 	var error = ('#{@sub.errors.full_messages.join(',')}');
 	$('.page-wrapper').after('<div class="alert alert-danger validation-error-alert" role="alert">'+error+'</div>');

@@ -27,7 +27,8 @@ module SwellSocial
 
 
 		def destroy
-			@sub = ObjectSubscription.active.where( user_id: current_user.id ).find_by( id: params[:id] )
+			@sub_id = params[:id]
+			@sub = ObjectSubscription.active.where( user_id: current_user.id ).find_by( id: @sub_id )
 			@button_class = params[:button_class]
 
 			respond_to do |format|
