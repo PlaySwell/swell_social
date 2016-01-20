@@ -30,7 +30,21 @@ module SwellSocial
 			where( "created_at >= ?", period_ago )
 		end
 
+		def self.has_content
+			where('((content = '') IS FALSE)')
+		end
 
+		def self.no_content
+			where.not('((content = '') IS FALSE)')
+		end
+
+		def self.order_has_content_desc
+			order( "((content = '') IS FALSE) DESC" )
+		end
+
+		def self.order_has_content_asc
+			order( "((content = '') IS FALSE) ASC" )
+		end
 
 		def to_s
 			"#{self.user}'s comment on #{self.parent_obj.to_s}"
