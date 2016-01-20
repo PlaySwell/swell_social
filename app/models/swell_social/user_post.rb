@@ -31,11 +31,11 @@ module SwellSocial
 		end
 
 		def self.has_content
-			where('((content = '') IS FALSE)')
+			where("((content = '') IS FALSE)")
 		end
 
 		def self.no_content
-			where.not('((content = '') IS FALSE)')
+			where.not("((content = '') IS FALSE)")
 		end
 
 		def self.order_has_content_desc
