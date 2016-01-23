@@ -58,8 +58,11 @@ module SwellSocial
 		private
 
 			def check_duplicates
-				check_query = UserPost.where( parent_obj_id: self.parent_obj_id, parent_obj_type: self.parent_obj.class.name, user_id: self.user_id, content: self.content ).within_last( 1.minute )
-				check_query = check_query.where.not( id: self.id ) if self.persisted?
+				if self.persisted? || self.content.blank?
+					check_query = UserPost.none
+				else
+					check_query = UserPost.where( parent_obj_id: self.parent_obj_id, parent_obj_type: self.parent_obj.class.name, user_id: self.user_id, content: self.content ).within_last( 1.minute )
+				end
 
 				if check_query.present?
 					self.errors.add :content, "Duplicate"
