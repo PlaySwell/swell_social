@@ -10,11 +10,19 @@ module SwellSocial
 
 			if @vote.save
 				add_user_event_for( @vote )
-				redirect_to :back
+
+				respond_to do |format|
+					format.html { redirect_to :back }
+					format.js {}
+				end
 			else
-				set_flash 'Vote could not be saved', :error, vote
-				redirect_to :back
-				return false
+				@error = 'Vote could not be saved'
+				set_flash @error, :error, @vote
+
+				respond_to do |format|
+					format.html { redirect_to :back }
+					format.js {}
+				end
 			end
 		end
 
@@ -23,7 +31,11 @@ module SwellSocial
 			@vote = Vote.find( params[:id] )
 			@vote.destroy
 			@vote.update_parent_caches
-			redirect_to :back
+
+			respond_to do |format|
+				format.html { redirect_to :back }
+				format.js {}
+			end
 		end
 
 		def update
@@ -40,7 +52,11 @@ module SwellSocial
 			if @vote.save
 				add_user_event_for( @vote )
 			end
-			redirect_to :back
+
+			respond_to do |format|
+				format.html { redirect_to :back }
+				format.js {}
+			end
 		end
 
 

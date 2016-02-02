@@ -1,0 +1,1 @@
+$(".swell_social_vote_widget_#{@vote.user.id}_#{@vote.parent_obj.id}_#{@vote.parent_obj.class.name.underscore.gsub(/\//,'_')}").html("#{j render(partial: 'swell_social/votes/widget', locals: {parent_obj: @vote.parent_obj, args: { disable_identifier_class: true, context: params[:context] }})}");
