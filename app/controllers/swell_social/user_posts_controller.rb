@@ -13,6 +13,10 @@ module SwellSocial
 
 
 		def create
+			@reply_to_comment = UserPost.find_by( id: params[:reply_to_id] ) if params[:reply_to_id].present?
+
+			# @parent_obj ||= @reply_to_comment.try(:parent_obj)
+
 			@post = UserPost.new( type: params[:comment_type], parent_obj_id: @parent_obj.id, parent_obj_type: @parent_obj.class.name, user: current_user, subject: params[:subject], content: params[:content], status: ( params[:draft] ? 'draft' : 'active' ) )
 			@context_selector = ''
 			@context_selector = "#{params[:context_selector]} " if params[:context_selector].present?
@@ -20,11 +24,11 @@ module SwellSocial
 
 			respond_to do |format|
 				if @post.save
+
+					@post.move_to_child_of( @reply_to_comment ) if @reply_to_comment.present?
+
 					SwellSocial::UserPostWorker.perform_async_if_possible( @post.id )
-					if @reply_to_comment = UserPost.find_by( id: params[:reply_to_id] )
-						@post.move_to_child_of( @reply_to_comment )
-					end
-					
+
 					# throw site event
 					record_user_event( event: 'comment', obj: @post, on: @parent_obj, content: "commented on the #{@post.parent_obj.class.name.downcase} <a href='#{@post.parent_obj.url}'>#{@post.parent_obj.try( :title ) }</a>!" )
 					format.html { redirect_to(:back, set_flash: 'Thanks for your comment') }

@@ -17,7 +17,7 @@ module SwellSocial
 
 				user_post.mentions = ( ActionController::Base.helpers.sanitize(user_post.content || '', tags: %w()) || '' ).scan(/\B(@[a-z0-9_-]+)/i).collect(&:first).uniq
 
-				user_post.save
+				user_post.save if user_post.changed?
 
 			rescue Exception => e
 				NewRelic::Agent.notice_error(e)
