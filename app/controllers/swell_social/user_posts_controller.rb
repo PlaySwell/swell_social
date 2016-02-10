@@ -11,6 +11,9 @@ module SwellSocial
 			render layout: 'admin'
 		end
 
+		def index
+			create
+		end
 
 		def create
 			@reply_to_comment = UserPost.find_by( id: params[:reply_to_id] ) if params[:reply_to_id].present?
