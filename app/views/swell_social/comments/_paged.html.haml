@@ -1,0 +1,10 @@
+
+.comments-for-page{ class: "comments-for-page-#{(comments.try(:current_page) || 1)}" }
+	- comments.each do |comment|
+		= render 'comment', comment: comment, args: {}
+
+- if comments.respond_to?(:current_page) && comments.current_page < comments.total_pages
+	.comments-for-page{ class: "comments-for-page-#{comments.current_page + 1}" }
+		.text-center
+			%a{ href: swell_social.comments_path( params.merge( page: (comments.current_page + 1) ) ), data: { remote: (params[:paged] == 'remote') } }
+				more
