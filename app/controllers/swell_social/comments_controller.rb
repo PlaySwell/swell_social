@@ -4,8 +4,8 @@ module SwellSocial
 
 		def index
 
-			if params[:parent_id].present?
-				@parent = UserPost.find( params[:parent_id] )
+			if params[:reply_to_id].present?
+				@parent = UserPost.find( params[:reply_to_id] )
 				@parent_obj = @parent.parent_obj
 			else
 				@parent_obj = params[:parent_obj_type].constantize.find(params[:parent_obj_id])
@@ -13,7 +13,7 @@ module SwellSocial
 
 			@comments = @parent_obj.try(params[:comment_attribute] || :comments)
 			@comments ||= UserPost.where( parent_obj_id: @parent_obj.id, parent_obj_type: @parent_obj.class.name )
-			@comments = @comments.where( parent_id: @parent.try(:id) )
+			@comments = @comments.where( reply_to_id: @parent.id ) if @parent.present?
 
 			@comments = @comments.page( params[:page] ).per( params[:per] || 6 ) if params[:paged]
 

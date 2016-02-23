@@ -18,12 +18,25 @@ module SwellSocial
 		belongs_to :actor, class_name: SwellMedia.registered_user_class
 		belongs_to :parent_obj, polymorphic: true
 
-		acts_as_nested_set
+		has_many 		:replies, class_name: UserPost.name, foreign_key: 'reply_to_id', inverse_of: :reply_to
+		belongs_to 	:reply_to, class_name: UserPost.name, inverse_of: :replies
+
 		acts_as_taggable_array_on :tags
 
 		include FriendlyId
 		friendly_id :slugger, use: :slugged
 
+		def self.not_reply
+			where( reply_to_id: nil )
+		end
+
+		def self.reply
+			where.not( reply_to_id: nil )
+		end
+
+		def reply?
+			reply_to_id.present?
+		end
 
 		def self.within_last( period=1.minute )
 			period_ago = Time.zone.now - period

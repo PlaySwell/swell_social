@@ -61,7 +61,7 @@ class SwellSocialMigration < ActiveRecord::Migration
 		create_table :user_posts do |t|
 			t.references		:user
 			t.references		:parent_obj,			polymorphic: true
-			t.references		:parent 				# for nested_set 
+			t.references		:reply_to 				# for nested_set
 			t.integer			:lft
 			t.integer			:rgt
 			t.string			:type
@@ -90,7 +90,7 @@ class SwellSocialMigration < ActiveRecord::Migration
 		end
 		add_index :user_posts, :user_id
 		add_index :user_posts, [ :parent_obj_id, :parent_obj_type ]
-		add_index :user_posts, :parent_id
+		add_index :user_posts, :reply_to_id
 		add_index :user_posts, :slug, unique: true
 		add_index :user_posts, :tags, using: 'gin'
 		add_index :user_posts, [:created_at, :mentions]
