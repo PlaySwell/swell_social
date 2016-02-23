@@ -38,6 +38,14 @@ module SwellSocial
 			reply_to_id.present?
 		end
 
+		def root_user_post
+			if reply?
+				reply_to.root_user_post || reply_to
+			else
+				nil
+			end
+		end
+
 		def self.within_last( period=1.minute )
 			period_ago = Time.zone.now - period
 			where( "created_at >= ?", period_ago )
