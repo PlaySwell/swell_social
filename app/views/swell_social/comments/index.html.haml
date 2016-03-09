@@ -1,4 +1,8 @@
-.comments-for-new
-	= render 'new_comment', parent_obj: @parent_obj, args: { reply_to: @parent.try(:id) }
+- unless @direction == :asc
+	.comments-for-new
+		= render 'new_comment', parent_obj: @parent_obj, args: { reply_to: @parent.try(:id) }
 .comments-for-pages
 	= render 'paged', comments: @comments, args: {}
+- if @direction == :asc
+	.comments-for-new
+		= render 'new_comment', parent_obj: @parent_obj, args: { reply_to: @parent.try(:id) }
