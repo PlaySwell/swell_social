@@ -17,6 +17,8 @@ module SwellSocial
 
 			@comments = @comments.page( params[:page] ).per( params[:per] || 6 ) if params[:paged]
 
+			@target = params[:target] || ".comments-for.comments-for-#{(@parent || @parent_obj).class.name.underscore.gsub('/','_')}-#{(@parent || @parent_obj).id}"
+
 			if params[:format].to_s == 'js'
 
 				if params[:layout] == '0'
