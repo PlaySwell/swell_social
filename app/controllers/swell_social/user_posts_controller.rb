@@ -20,7 +20,7 @@ module SwellSocial
 			@post = UserPost.new( type: params[:comment_type], parent_obj_id: @parent_obj.id, parent_obj_type: @parent_obj.class.name, user: current_user, subject: params[:subject], content: params[:content], status: ( params[:draft] ? 'draft' : 'active' ), reply_to_id: params[:reply_to_id] )
 			@context_selector = ''
 			@context_selector = "#{params[:context_selector]} " if params[:context_selector].present?
-
+			@direction = (params[:direction] || 'desc').to_sym
 
 			respond_to do |format|
 				if @post.save

@@ -10,13 +10,13 @@ module SwellSocial
 
 				@parent = UserPost.find( params[:reply_to_id] )
 				@parent_obj = @parent.parent_obj
-				@comments = UserPost.where( reply_to_id: @parent.id ).order(created_at: :asc)
-				@direction = :asc
+				@comments = UserPost.where( reply_to_id: @parent.id ).order(created_at: @direction)
 
 			else
 				@parent_obj = params[:parent_obj_type].constantize.find(params[:parent_obj_id])
 
-				@comments = @parent_obj.try(params[:comment_attribute] || :comments)
+				@comments = @parent_obj.try(params[:comment_attribute] || :comments, order: :desc )
+				@comments ||= @parent_obj.try(params[:comment_attribute] || :comments)
 				@comments ||= UserPost.where( parent_obj_id: @parent_obj.id, parent_obj_type: @parent_obj.class.name )
 				@comments = @comments.where( reply_to_id: nil )
 			end
