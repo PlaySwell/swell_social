@@ -2,4 +2,4 @@
 - if params[:page].nil?
 	$("#{@target}").html("#{j render(template: 'swell_social/comments/index.html', locals: {}, layout: false)}").trigger('ready.subsequent')
 - else
-	$("#{@target} .comments-for-page-#{@comments.current_page}").replaceWith("#{j render(partial: 'swell_social/comments/paged.html.haml', locals: { comments: @comments, args: {} })}").trigger('ready.subsequent')
+	$("#{@target} .comments-for-page-#{@comments.current_page}").replaceWith("#{j render(partial: 'swell_social/comments/paged.html.haml', locals: { comments: @comments, args: { target: params[:target], parent_obj_type: @parent_obj.class.name, parent_obj_id: @parent_obj.id, direction: params[:direction], paged: params[:paged] } })}").trigger('ready.subsequent')
