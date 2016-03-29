@@ -5,6 +5,8 @@ module SwellSocial
 		self.table_name = 'user_posts'
 		include SwellMedia::Concerns::TagArrayConcern
 
+		before_save	:set_cached_counts
+
 		enum status: { 'to_moderate' => -1, 'draft' => 0, 'active' => 1, 'removed' => 2, 'trash' => 3 }
 		enum availability: { 'just_me' => 1, 'anyone' => 2 }
 
@@ -26,6 +28,11 @@ module SwellSocial
 		include FriendlyId
 		friendly_id :slugger, use: :slugged
 
+		def char_count
+			return 0 if self.content.blank?
+			self.sanitized_content.size
+		end
+
 		def self.not_reply
 			where( reply_to_id: nil )
 		end
@@ -44,6 +51,15 @@ module SwellSocial
 			else
 				nil
 			end
+		end
+
+		def sanitized_content
+			ActionView::Base.full_sanitizer.sanitize( self.content )
+		end
+
+		def word_count
+			return 0 if self.content.blank?
+			self.sanitized_content.scan(/[\w-]+/).size
 		end
 
 		def self.within_last( period=1.minute )
@@ -77,6 +93,16 @@ module SwellSocial
 
 
 		private
+
+			def set_cached_counts
+				if self.respond_to?( :cached_word_count )
+					self.cached_word_count = self.word_count
+				end
+
+				if self.respond_to?( :cached_char_count )
+					self.cached_char_count = self.char_count
+				end
+			end
 
 			def check_duplicates
 				if self.persisted? || self.content.blank?
