@@ -5,7 +5,7 @@ module SwellSocial
 		self.table_name = 'user_posts'
 		include SwellMedia::Concerns::TagArrayConcern
 
-		before_save	:set_cached_counts
+		before_save	:set_cached_counts, :update_content_hash
 
 		enum status: { 'to_moderate' => -1, 'draft' => 0, 'active' => 1, 'removed' => 2, 'trash' => 3 }
 		enum availability: { 'just_me' => 1, 'anyone' => 2 }
@@ -31,6 +31,10 @@ module SwellSocial
 		def char_count
 			return 0 if self.content.blank?
 			self.sanitized_content.size
+		end
+
+		def compute_content_hash
+			Digest::SHA1.hexdigest(self.content || '')
 		end
 
 		def self.not_reply
@@ -94,6 +98,10 @@ module SwellSocial
 
 		private
 
+			def update_content_hash
+				self.content_hash = compute_content_hash if self.respond_to?( :content_hash )
+			end
+
 			def set_cached_counts
 				if self.respond_to?( :cached_word_count )
 					self.cached_word_count = self.word_count
@@ -108,7 +116,17 @@ module SwellSocial
 				if self.persisted? || self.content.blank?
 					check_query = UserPost.none
 				else
-					check_query = UserPost.where( parent_obj_id: self.parent_obj_id, parent_obj_type: self.parent_obj.class.name, user_id: self.user_id, content: self.content ).within_last( 1.minute )
+
+					if self.respond_to?( :content_hash )
+
+						check_query = UserPost.where( parent_obj_id: self.parent_obj_id, parent_obj_type: self.parent_obj.class.name, user_id: self.user_id, content_hash: self.compute_content_hash ).within_last( 1.minute )
+
+					else
+
+						check_query = UserPost.where( parent_obj_id: self.parent_obj_id, parent_obj_type: self.parent_obj.class.name, user_id: self.user_id, content: self.content ).within_last( 1.minute )
+
+					end
+
 				end
 
 				if check_query.present?
