@@ -8,3 +8,5 @@
 			.text-center
 				%a{ href: swell_social.comments_path( target: args[:target], parent_obj_type: parent_obj.class.name, parent_obj_id: parent_obj.id, page: (comments.current_page + 1), per: comments.limit_value, format: :js ), data: { remote: true } }
 					more
+- else
+	.comments-for-page{ class: "comments-for-page-#{comments.current_page}" }
