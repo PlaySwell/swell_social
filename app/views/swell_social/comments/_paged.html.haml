@@ -1,10 +1,10 @@
+- if ( comments = SwellSocial::UserPost.where( parent_obj_id: parent_obj.id, parent_obj_type: parent_obj.class.name.demodulize ).includes(:user).order( created_at: :asc ).page(args[:page]).per(args[:per] || 6) ).present?
+	.comments-for-page{ class: "comments-for-page-#{comments.current_page}" }
+		- comments.each do |comment|
+			= render 'user_posts/comment', user_post: comment, args: { target: args[:target] }
 
-.comments-for-page{ class: "comments-for-page-#{(comments.try(:current_page) || 1)}" }
-	- comments.each do |comment|
-		= render 'comment', comment: comment, args: {}
-
-- if comments.respond_to?(:current_page) && comments.current_page < comments.total_pages
-	.comments-for-page{ class: "comments-for-page-#{comments.current_page + 1}" }
-		.text-center
-			%a{ href: swell_social.comments_path( params.merge( page: (comments.current_page + 1) ) ), data: { remote: (params[:paged] == 'remote') } }
-				more
+	- if comments.current_page < comments.total_pages
+		.comments-for-page{ class: "comments-for-page-#{comments.current_page + 1}" }
+			.text-center
+				%a{ href: swell_social.comments_path( target: args[:target], parent_obj_type: parent_obj.class.name, parent_obj_id: parent_obj.id, page: (comments.current_page + 1), per: comments.limit_value, format: :js ), data: { remote: true } }
+					more
