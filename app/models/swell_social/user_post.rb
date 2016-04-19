@@ -46,7 +46,7 @@ module SwellSocial
 		end
 
 		def reply?
-			reply_to_id.present?
+			not( reply_to_id.nil? )
 		end
 
 		def root_user_post
