@@ -24,7 +24,7 @@ module SwellSocial
 
 		def actor_list
 			if children_count > 0
-				self.actors.reorder( 'notifications.created_at ASC' )
+				User.joins("INNER JOIN (#{self.children.group(:user_id).select(:user_id, 'MIN(created_at) created_at').reorder('').to_sql}) user_post_children ON user_post_children.user_id = users.id").order('user_post_children.created_at ASC')
 			else
 				SwellMedia.registered_user_class.constantize.where( id: self.actor_id )
 			end
