@@ -12,7 +12,7 @@
 			%a{ class: args[:link_class], href: swell_social.vote_path( id: name, parent_obj_type: parent_obj.class.name, parent_obj_id: parent_obj.id ), data: { method: :PUT, remote: true } }=(args[:label] || 'Vote')
 		%span.swell_social_vote_radio_widget_no_vote
 			%span.badge=count_without
-			%a{ class: args[:link_class], href: swell_social.votes_path( name: name, parent_obj_type: parent_obj.class.name, parent_obj_id: parent_obj.id, val: -1, context: ( args[:context] || 'radio' ) ), data: { method: :POST, remote: true } }=(args[:label] || 'Vote')
+			%a{ class: args[:link_class], href: swell_social.votes_path( name: name, parent_obj_type: parent_obj.class.name, parent_obj_id: parent_obj.id, val: 1, context: ( args[:context] || 'radio' ) ), data: { method: :POST, remote: true } }=(args[:label] || 'Vote')
 
 	- else
 		%span.swell_social_vote_radio_widget_no_vote
