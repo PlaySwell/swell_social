@@ -36,7 +36,7 @@
 		%span.upvote.val
 			= vote_count( parent_obj.cached_upvote_count )
 			
-		= link_to swell_social.votes_path( (args[:post_options] || {}).merge(parent_obj_type: parent_obj.class.name, parent_obj_id: parent_obj.id, val: -1, context: ( args[:context] || 'like' )) ), method: (args[:no_method] ? nil : :post), data: args[:link_data], class: 'vote-widget downvote' do
+		= link_to swell_social.votes_path( (args[:post_options] || {}).merge( parent_obj_type: parent_obj.class.name, parent_obj_id: parent_obj.id, val: -1, context: ( args[:context] || 'like' )) ), method: (args[:no_method] ? nil : :post), data: args[:link_data], class: 'vote-widget downvote' do
 			%i{ class: args[:context] == 'vote' ? 'fa fa-arrow-circle-o-down' : 'fa fa-thumbs-o-down' }
 
 		%span.downvote.val

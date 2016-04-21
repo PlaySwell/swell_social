@@ -1,0 +1,17 @@
+.swell_social_vote_radio_widget
+{
+  display: inline;
+}
+
+.swell_social_vote_radio_widget>.swell_social_vote_radio_widget_active,
+.swell_social_vote_radio_widget>.swell_social_vote_radio_widget_voted,
+.swell_social_vote_radio_widget.voted.active>.swell_social_vote_radio_widget_voted,
+.swell_social_vote_radio_widget.voted>.swell_social_vote_radio_widget_no_vote
+{
+  display: none;
+}
+.swell_social_vote_radio_widget.active>.swell_social_vote_radio_widget_active,
+.swell_social_vote_radio_widget.voted>.swell_social_vote_radio_widget_voted
+{
+  display: inline;
+}

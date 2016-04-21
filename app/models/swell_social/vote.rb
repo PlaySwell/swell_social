@@ -33,16 +33,35 @@ module SwellSocial
 
 
 		def update_parent_caches( args={} )
-			if self.parent_obj.respond_to?( :cached_vote_count )
 
-				upvotes = Vote.by_object( self.parent_obj ).up.count
-				downvotes = Vote.by_object( self.parent_obj ).down.count
-				totalvotes = upvotes + downvotes
+			parent_obj_list = [self.parent_obj]
 
-				score = upvotes.to_f
-				score = upvotes.to_f / totalvotes if totalvotes > 0
+			# if parent_obj was changed (and not during creation)
+			if ( self.user.previous_changes[:parent_obj_id] || self.user.previous_changes[:parent_obj_type] ).present? && self.user.previous_changes[:created_at].blank?
 
-				self.parent_obj.update( cached_vote_count: totalvotes, cached_vote_score: score, cached_downvote_count: downvotes, cached_upvote_count: upvotes )
+				old_parent_obj_type = self.user.previous_changes[:parent_obj_type].try(:first) || self.user.parent_obj_type
+				old_parent_obj_id = self.user.previous_changes[:parent_obj_id].try(:first) || self.user.parent_obj_id
+
+				old_parent_obj = old_parent_obj_type.constantize.where( id: old_parent_obj_id ).first
+
+				parent_obj_list << old_parent_obj if old_parent_obj.present?
+
+			end
+
+			parent_obj_list.each do |parent_obj|
+
+				if parent_obj.respond_to?( :cached_vote_count )
+
+					upvotes = Vote.by_object( parent_obj ).up.count
+					downvotes = Vote.by_object( parent_obj ).down.count
+					totalvotes = upvotes + downvotes
+
+					score = upvotes.to_f
+					score = upvotes.to_f / totalvotes if totalvotes > 0
+
+					parent_obj.update( cached_vote_count: totalvotes, cached_vote_score: score, cached_downvote_count: downvotes, cached_upvote_count: upvotes )
+
+				end
 
 			end
 		end

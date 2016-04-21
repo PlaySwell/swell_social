@@ -9,7 +9,7 @@ module SwellSocial
 		end
 
 		def create
-			@vote = Vote.where( user_id: current_user.id, parent_obj_type: params[:parent_obj_type], parent_obj_id: params[:parent_obj_id], context: params[:context] ).first_or_initialize
+			@vote = Vote.where( user_id: current_user.id, parent_obj_type: params[:parent_obj_type], parent_obj_id: params[:parent_obj_id], context: params[:context], name: params[:name] ).first_or_initialize
 			@vote.val = params[:val].try( :to_i ) || params[:up].try( :to_i ) || 1
 
 			if @vote.save
@@ -32,7 +32,9 @@ module SwellSocial
 
 
 		def destroy
-			@vote = Vote.find( params[:id] )
+			@vote = Vote.where( user: current_user ).find_by( name: params[:id] )
+			@vote ||= Vote.where( user: current_user ).find( params[:id] )
+
 			@vote.destroy
 			@vote.update_parent_caches
 
@@ -43,15 +45,24 @@ module SwellSocial
 		end
 
 		def update
-			# this action flips the vote!
-			@vote = Vote.find( params[:id] )
-			if @vote.up?
+			# this action flips the vote!, unless updating what the vote is for.
+
+			@vote = Vote.where( user: current_user ).find_by( name: params[:id] )
+			@vote ||= Vote.where( user: current_user ).find( params[:id] )
+
+			if params[:parent_obj_type]
+				@old_parent_obj = @vote.parent_obj
+				@vote.parent_obj_type = params[:parent_obj_type]
+				@vote.parent_obj_id = params[:parent_obj_id]
+			elsif @vote.up?
 				dir = 'down'
 				@vote.val = dir
 			else
 				dir = 'up'
 				@vote.val = dir
 			end
+
+			puts "@vote #{@vote.to_json}"
 
 			if @vote.save
 				add_user_event_for( @vote )
