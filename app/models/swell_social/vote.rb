@@ -7,10 +7,11 @@ module SwellSocial
 		belongs_to	:user
 		belongs_to	:parent_obj, polymorphic: true
 
-		validates	:user_id, presence: true, uniqueness: { scope: [ :parent_obj_type, :parent_obj_id, :context ] }
+		validates	:user_id, presence: true, uniqueness: { scope: [ :parent_obj_type, :parent_obj_id, :vote_type ] }, if: :multiple_choice?
+		validates	:user_id, presence: true, uniqueness: { scope: [ :parent_obj_type, :parent_obj_id, :vote_type ] }, unless: :multiple_choice?
 
-		def self.by_context( context='like' )
-			where( context: context )
+		def self.by_vote_type( vote_type='like' )
+			where( vote_type: vote_type )
 		end
 
 		def self.by_object( obj )
@@ -22,7 +23,11 @@ module SwellSocial
 		end
 
 		def self.likes
-			self.up.by_context( 'like' )
+			self.up.by_vote_type( 'like' )
+		end
+
+		def multiple_choice?
+			self.vote_type == 'multiple_choice'
 		end
 
 

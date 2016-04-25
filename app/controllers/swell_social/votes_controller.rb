@@ -9,7 +9,7 @@ module SwellSocial
 		end
 
 		def create
-			@vote = Vote.where( user_id: current_user.id, parent_obj_type: params[:parent_obj_type], parent_obj_id: params[:parent_obj_id], context: params[:context], name: params[:name] ).first_or_initialize
+			@vote = Vote.where( user_id: current_user.id, parent_obj_type: params[:parent_obj_type], parent_obj_id: params[:parent_obj_id], vote_type: params[:vote_type], name: params[:name] ).first_or_initialize
 			@vote.val = params[:val].try( :to_i ) || params[:up].try( :to_i ) || 1
 
 			if @vote.save
@@ -79,14 +79,14 @@ module SwellSocial
 			def add_user_event_for( vote )
 				if vote.up?
 					event = 'upvote'
-					if vote.context == 'like'
+					if vote.vote_type == 'like'
 						verb = 'liked'
 					else
 						verb = 'up voted'
 					end
 				else # downvote
 					event = 'downvote'
-					if vote.context == 'like'
+					if vote.vote_type == 'like'
 						verb = 'disliked'
 					else
 						verb = 'down voted'

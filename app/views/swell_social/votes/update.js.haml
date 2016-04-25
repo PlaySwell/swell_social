@@ -1,5 +1,5 @@
-- if @vote.context == 'radio'
-	$(".swell_social_vote_radio_widget[data-vote-name='#{j @vote.name}']").addClass('voted').removeClass('active')
-	$(".swell_social_vote_radio_widget[data-vote-name='#{j @vote.name}'][data-vote-parent-obj-type='#{j @vote.parent_obj_type}'][data-vote-parent-obj-id='#{@vote.parent_obj_id}']").addClass('active')
+- if @vote.vote_type == 'multiple_choice'
+	$(".swell_social_vote_multiple_choice_widget[data-vote-name='#{j @vote.name}']").addClass('voted').removeClass('active')
+	$(".swell_social_vote_multiple_choice_widget[data-vote-name='#{j @vote.name}'][data-vote-parent-obj-type='#{j @vote.parent_obj_type}'][data-vote-parent-obj-id='#{@vote.parent_obj_id}']").addClass('active')
 - else
-	$(".swell_social_vote_widget_#{@vote.user.id}_#{@vote.parent_obj.id}_#{@vote.parent_obj.class.name.underscore.gsub(/\//,'_')}").html("#{j render(partial: 'swell_social/votes/widget', locals: {parent_obj: @vote.parent_obj, args: { disable_identifier_class: true, context: params[:context] }})}");
+	$(".swell_social_vote_widget_#{@vote.user.id}_#{@vote.parent_obj.id}_#{@vote.parent_obj.class.name.underscore.gsub(/\//,'_')}").html("#{j render(partial: 'swell_social/votes/widget', locals: {parent_obj: @vote.parent_obj, args: { disable_identifier_class: true, vote_type: params[:vote_type] }})}");
