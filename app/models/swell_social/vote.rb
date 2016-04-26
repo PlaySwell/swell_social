@@ -7,8 +7,7 @@ module SwellSocial
 		belongs_to	:user
 		belongs_to	:parent_obj, polymorphic: true
 
-		validates	:user_id, presence: true, uniqueness: { scope: [ :parent_obj_type, :parent_obj_id, :vote_type ] }, if: :multiple_choice?
-		validates	:user_id, presence: true, uniqueness: { scope: [ :parent_obj_type, :parent_obj_id, :vote_type ] }, unless: :multiple_choice?
+		validates	:user_id, presence: true, uniqueness: { scope: [ :parent_obj_type, :parent_obj_id, :vote_type ] }
 
 		def self.by_vote_type( vote_type='like' )
 			where( vote_type: vote_type )

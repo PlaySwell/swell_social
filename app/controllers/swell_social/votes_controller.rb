@@ -9,7 +9,7 @@ module SwellSocial
 		end
 
 		def create
-			@vote = Vote.where( user_id: current_user.id, parent_obj_type: params[:parent_obj_type], parent_obj_id: params[:parent_obj_id], vote_type: params[:vote_type], name: params[:name] ).first_or_initialize
+			@vote = Vote.where( user_id: current_user.id, parent_obj_type: params[:parent_obj_type], parent_obj_id: params[:parent_obj_id], vote_type: params[:vote_type], context: params[:context] ).first_or_initialize
 			@vote.val = params[:val].try( :to_i ) || params[:up].try( :to_i ) || 1
 
 			if @vote.save
@@ -32,7 +32,7 @@ module SwellSocial
 
 
 		def destroy
-			@vote = Vote.where( user: current_user ).find_by( name: params[:id] )
+			@vote = Vote.where( user: current_user ).find_by( context: params[:id] )
 			@vote ||= Vote.where( user: current_user ).find( params[:id] )
 
 			@vote.destroy
@@ -47,7 +47,7 @@ module SwellSocial
 		def update
 			# this action flips the vote!, unless updating what the vote is for.
 
-			@vote = Vote.where( user: current_user ).find_by( name: params[:id] )
+			@vote = Vote.where( user: current_user ).find_by( context: params[:id] )
 			@vote ||= Vote.where( user: current_user ).find( params[:id] )
 
 			if params[:parent_obj_type]
