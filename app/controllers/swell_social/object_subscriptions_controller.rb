@@ -10,12 +10,12 @@ module SwellSocial
 			
 			respond_to do |format|
 			  if @sub.active!
-				record_user_event( event: "subscribe", on: @sub.parent_obj, content: "subscribed to the #{@sub.parent_obj.class.name.downcase} <a href='#{@sub.parent_obj.try(:url)}'>#{@sub.parent_obj.to_s}</a>!" )
-				format.html { redirect_to(:back, set_flash: 'Subscribed') }
-				format.js { render 'create' }
+					record_user_event( event: "subscribe", on: @sub.parent_obj, obj: @sub, content: "subscribed to the #{@sub.parent_obj.class.name.downcase} <a href='#{@sub.parent_obj.try(:url)}'>#{@sub.parent_obj.to_s}</a>!" )
+					format.html { redirect_to(:back, set_flash: 'Subscribed') }
+					format.js { render 'create' }
 			  else
-				format.html { redirect_to(:back, set_flash: 'Error') }
-				format.js { render 'create' }
+					format.html { redirect_to(:back, set_flash: 'Error') }
+					format.js { render 'create' }
 			  end
 			end
 
