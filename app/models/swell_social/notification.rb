@@ -23,21 +23,22 @@ module SwellSocial
 			where( status: [1,2] )
 		end
 
-		def actor_list
-			if children_count > 0
-				User.joins("INNER JOIN (#{self.children.group(:actor_id).select(:actor_id, 'MIN(created_at) created_at').reorder('').to_sql}) user_post_children ON user_post_children.actor_id = users.id").order('user_post_children.created_at ASC')
-			else
-				SwellMedia.registered_user_class.constantize.where( id: self.actor_id )
-			end
-		end
-
 		def actor_str( args = {} )
 
 			args[:max_actors] ||= 3
 
-			total_actors = self.actor_list.count
+			actor_shortlist = []
+			total_actors = 0
 
-			actor_shortlist = self.actor_list.limit(args[:max_actors])
+			if children_count > 0
+				actor_shortlist = User.joins("INNER JOIN (#{self.children.group(:actor_id).select(:actor_id, 'MIN(created_at) created_at').reorder('').to_sql}) user_post_children ON user_post_children.actor_id = users.id").order('user_post_children.created_at ASC')
+				actor_shortlist = actor_shortlist.limit(args[:max_actors])
+
+				total_actors = actor_shortlist.count
+			elsif self.actor_id.present? && self.actor.present?
+				actor_shortlist = [self.actor]
+				total_actors = 1
+			end
 
 			actor_shortlist_join_count = [(actor_shortlist.count-2),0].max
 
