@@ -3,6 +3,8 @@ module SwellSocial
 	class Notification < ActiveRecord::Base
 		self.table_name = 'notifications'
 
+		before_save :set_default_publish_at
+
 		enum status: { 'hidden' => 0, 'unnoticed' => 1, 'unread' => 2, 'read' => 3, 'archived' => 4, 'trash' => 5 }
 
 		belongs_to		:user, class_name: SwellMedia.registered_user_class
@@ -21,6 +23,14 @@ module SwellSocial
 
 		def self.not_read
 			where( status: [1,2] )
+		end
+
+		def published?
+			self.publish_at < Time.now && %w(unnoticed unread read).include?( self.status.to_s )
+		end
+
+		def self.published
+			where('publish_at < ?', Time.now).where( status: [ FeedItem.statuses['unnoticed'], FeedItem.statuses['unread'], FeedItem.statuses['read'] ] )
 		end
 
 		def actor_str( args = {} )
@@ -68,6 +78,11 @@ module SwellSocial
 
 		def active?
 			unnoticed? || unread? || read?
+		end
+
+		protected
+		def set_default_publish_at
+			self.publish_at ||= Time.now
 		end
 
 	end
