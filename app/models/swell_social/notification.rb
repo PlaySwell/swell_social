@@ -30,7 +30,7 @@ module SwellSocial
 		end
 
 		def self.published
-			where('publish_at < ?', Time.now).where( status: [ FeedItem.statuses['unnoticed'], FeedItem.statuses['unread'], FeedItem.statuses['read'] ] )
+			where('publish_at < ?', Time.now).where( status: [ Notification.statuses['unnoticed'], Notification.statuses['unread'], Notification.statuses['read'] ] )
 		end
 
 		def actor_str( args = {} )
