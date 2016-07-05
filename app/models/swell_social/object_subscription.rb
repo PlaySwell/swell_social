@@ -9,6 +9,14 @@ module SwellSocial
 		belongs_to	:user
 		belongs_to	:parent_obj, polymorphic: true 
 
+		def self.muted
+			where.not( mute: false, status: 'active' )
+		end
+
+		def self.vocal
+			where( mute: false, status: 'active' )
+		end
+
 		
 	end
 	

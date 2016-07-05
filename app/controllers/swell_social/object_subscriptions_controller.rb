@@ -21,10 +21,6 @@ module SwellSocial
 
 		end
 
-		def show
-			destroy
-		end
-
 
 		def destroy
 			@sub_id = params[:id]
@@ -45,6 +41,34 @@ module SwellSocial
 					format.html { redirect_to(:back, set_flash: 'Could not unsubscribe') }
 					format.js { render 'destroy' }
 				end
+			end
+
+		end
+
+		def show
+			destroy
+		end
+
+
+		def update
+			@sub_id = params[:id]
+			if @sub_id == '0'
+				@sub = ObjectSubscription.active.where( user_id: current_user.id ).find_by( parent_obj_type: params[:obj_type], parent_obj_id: params[:obj_id] )
+				@sub_id = @sub.id
+			else
+				@sub = ObjectSubscription.active.where( user_id: current_user.id ).find_by( id: @sub_id )
+			end
+
+			@sub.attributes = params.require( :object_subscription ).permit( :mute, :availability, :status )
+
+			if @sub.save
+
+				redirect_to(:back, set_flash: 'Success')
+
+			else
+
+				redirect_to(:back, set_flash: 'Error')
+
 			end
 
 		end
