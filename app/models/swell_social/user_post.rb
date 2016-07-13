@@ -11,7 +11,7 @@ module SwellSocial
 		enum availability: { 'just_me' => 1, 'anyone' => 2 }
 
 		validate 				:check_duplicates
-		validates_presence_of 	:content, unless: :allow_blank_content
+		validates_presence_of 	:content, if: :validate_presence_of_content?
 
 		attr_accessor	:allow_blank_content
 
@@ -97,6 +97,10 @@ module SwellSocial
 
 
 		private
+
+			def validate_presence_of_content?
+				not( self.allow_blank_content ) && self.content_changed?
+			end
 
 			def update_content_hash
 				self.content_hash = compute_content_hash if self.respond_to?( :content_hash )
