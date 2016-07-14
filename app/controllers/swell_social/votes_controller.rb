@@ -32,7 +32,8 @@ module SwellSocial
 
 
 		def destroy
-			@vote = Vote.where( user: current_user ).find_by( context: params[:id] )
+			@vote = Vote.where( user: current_user ).find_by( parent_obj_id: params[:id], parent_obj_type: params[:parent_obj_type] ) if params[:parent_obj_type].present? && params[:parent_obj_id].nil?
+			@vote ||= Vote.where( user: current_user ).find_by( context: params[:id] )
 			@vote ||= Vote.where( user: current_user ).find( params[:id] )
 
 			@vote.destroy
@@ -46,8 +47,8 @@ module SwellSocial
 
 		def update
 			# this action flips the vote!, unless updating what the vote is for.
-
-			@vote = Vote.where( user: current_user ).find_by( context: params[:id] )
+			@vote = Vote.where( user: current_user ).find_by( parent_obj_id: params[:id], parent_obj_type: params[:parent_obj_type] ) if params[:parent_obj_type].present? && params[:parent_obj_id].nil?
+			@vote ||= Vote.where( user: current_user ).find_by( context: params[:id] )
 			@vote ||= Vote.where( user: current_user ).find( params[:id] )
 
 			if params[:parent_obj_type]
