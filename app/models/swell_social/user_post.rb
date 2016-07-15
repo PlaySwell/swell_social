@@ -96,11 +96,13 @@ module SwellSocial
 		end
 
 
-		private
+		protected
 
 			def validate_presence_of_content?
 				not( self.allow_blank_content ) && self.content_changed?
 			end
+
+		private
 
 			def update_content_hash
 				self.content_hash = compute_content_hash if self.respond_to?( :content_hash )
