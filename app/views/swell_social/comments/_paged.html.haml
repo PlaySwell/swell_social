@@ -5,7 +5,7 @@
 
 	- if comments.current_page < comments.total_pages
 		.comments-for-page{ class: "comments-for-page-#{comments.current_page + 1}" }
-			.text-center
+			.text-center.comments-for-page-more
 				%a{ href: swell_social.comments_path( target: args[:target], parent_obj_type: parent_obj.class.name, parent_obj_id: parent_obj.id, page: (comments.current_page + 1), per: comments.limit_value, format: :js ), data: { remote: true } }
 					more
 - else
