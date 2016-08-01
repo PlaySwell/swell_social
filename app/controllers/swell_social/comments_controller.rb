@@ -25,5 +25,21 @@ module SwellSocial
 
 		end
 
+		def edit
+			@post = UserPost.find( params[:id] )
+
+			render layout: false if params[:layout] == '0'
+		end
+
+		def new
+			@reply_to = UserPost.find( params[:reply_to_id] ) if params[:reply_to_id].present?
+			render layout: false if params[:layout] == '0'
+		end
+
+		def show
+			@post = UserPost.find( params[:id] )
+			render layout: false if params[:layout] == '0'
+		end
+
 	end
 end
