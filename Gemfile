@@ -1,15 +1,20 @@
 source "https://rubygems.org"
 
-# Declare your gem's dependencies in swell_social.gemspec.
+# Declare your gem's dependencies in swell_product.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
 # development dependencies will be added by default to the :development group.
 gemspec
 
 # these are for rspec...
-gem "acts-as-taggable-on"
-gem "awesome_nested_set", '~> 3.0.0.rc.3'
-gem 'devise'
-gem "friendly_id", '~> 5.0.0'
+gem 'swell_media', git: 'git://github.com/playswell/swell_media.git', branch: 'v2'
+# gem 'resque'
+
+# gem 'link_thumbnailer'
+# gem 'youtube_it'
+# gem 'mechanize'
+# gem 'css_parser'
+# gem 'nokogiri'
+# #gem 'pg', '0.17.1'
 
 
 # Declare any dependencies that are still in development here instead of in
@@ -20,5 +25,3 @@ gem "friendly_id", '~> 5.0.0'
 # To use debugger
 # gem 'debugger'
 
-gem "rspec-rails"
-gem "factory_girl_rails", "~> 4.0"

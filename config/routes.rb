@@ -1,15 +1,23 @@
 SwellSocial::Engine.routes.draw do
 	
-	post '/comment_on/:type/:id' => 'user_posts#create', as: 'comment_on'
+	match '/comment_on/:type/:id' => 'user_posts#create', as: 'comment_on', via: [:get, :post]
 
-	resources :discussion_topics, path: :discussions
+	resources :comments, only: [:index, :new, :edit, :show]
 
+	resources :discussions do 
+		resources :topics, controller: :discussion_topics
+	end
+	resources :discussion_posts
+	resources :discussion_admin
+
+	resources :notifications
+	
 	resources :object_subscriptions
 
 	resources :user_posts do 
 		get :admin, on: :collection
 	end
 
-	resources :votes
+	resources :votes, only: [:create, :destroy, :update, :index]
 
 end

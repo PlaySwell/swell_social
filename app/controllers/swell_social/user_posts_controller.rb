@@ -11,24 +11,33 @@ module SwellSocial
 			render layout: 'admin'
 		end
 
+		def index
+			create
+		end
 
 		def create
-			@post = UserPost.new( type: params[:comment_type], parent_obj_id: @parent_obj.id, parent_obj_type: @parent_obj.class.name, user: current_user, subject: params[:subject], content: params[:content], status: ( params[:draft] ? 'draft' : 'active' ) )
 
-			if @post.save
-				if @reply_to_comment = UserPost.find_by( id: params[:reply_to_id] )
-					@post.move_to_child_of( @reply_to_comment )
+			@post = UserPost.new( type: params[:comment_type], parent_obj_id: @parent_obj.id, parent_obj_type: @parent_obj.class.name, user: current_user, subject: params[:subject], content: params[:content], status: ( params[:draft] ? 'draft' : 'active' ), reply_to_id: params[:reply_to_id] )
+			@context_selector = ''
+			@context_selector = "#{params[:context_selector]} " if params[:context_selector].present?
+			@direction = (params[:direction] || 'desc').to_sym
+
+			respond_to do |format|
+				if @post.save
+
+					SwellSocial::UserPostWorker.perform_async_if_possible( @post.id )
+
+					# throw site event
+					record_user_event( event: 'comment', obj: @post, on: @parent_obj, content: "commented on the #{@post.parent_obj.class.name.downcase} <a href='#{@post.parent_obj.url}'>#{@post.parent_obj.try( :title ) }</a>!" )
+					format.html { redirect_to(:back, set_flash: 'Thanks for your comment') }
+					format.js {}
+				else
+					format.html { redirect_to(:back, set_flash: 'Comment could not be saved') }
+					format.js {}
 				end
-				set_flash 'Thanks for your comment'
-				
-				# throw site event
-				record_user_event( 'comment', user: current_user, on: @parent_obj, content: "<i class='fa fa-comment'></i> commented on the #{@post.parent_obj.class.name.downcase} <a href='#{@post.parent_obj.url( ref: current_user )}'>#{@post.parent_obj.title}</a>!" ) if defined?( SwellPlay )
-
-			else
-				set_flash 'Comment could not be saved', :error, @post
 			end
 
-			redirect_to :back
+			# redirect_to :back
 		end
 
 		def destroy
@@ -46,14 +55,23 @@ module SwellSocial
 		end
 
 		def update
-			authorize!( :admin, UserPost )
 			@post = UserPost.find( params[:id] )
-			if @post.update( comment_params )
-				set_flash "Comment Updated"
-			else
-				set_flash "Comment could not be updated", :error, @post
+			@context_selector = ''
+			@context_selector = "#{params[:context_selector]} " if params[:context_selector].present?
+
+			authorize( @post, :admin_update? )
+
+			respond_to do |format|
+				if @post.update( comment_params )
+					SwellSocial::UserPostWorker.perform_async_if_possible( @post.id )
+					format.html { redirect_to(:back, set_flash: 'Comment updated') }
+					format.js {}
+				else
+					format.html { redirect_to(:back, set_flash: 'Comment could not be updated') }
+					format.js {}
+				end
 			end
-			redirect_to :back
+
 		end
 
 

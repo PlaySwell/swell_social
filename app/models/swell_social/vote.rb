@@ -7,10 +7,10 @@ module SwellSocial
 		belongs_to	:user
 		belongs_to	:parent_obj, polymorphic: true
 
-		validates	:user_id, presence: true, uniqueness: { scope: [ :parent_obj_type, :parent_obj_id, :context ] }
+		validates	:user_id, presence: true, uniqueness: { scope: [ :parent_obj_type, :parent_obj_id, :vote_type ] }
 
-		def self.by_context( context='like' )
-			where( context: context )
+		def self.by_vote_type( vote_type='like' )
+			where( vote_type: vote_type )
 		end
 
 		def self.by_object( obj )
@@ -22,7 +22,11 @@ module SwellSocial
 		end
 
 		def self.likes
-			self.up.by_context( 'like' )
+			self.up.by_vote_type( 'like' )
+		end
+
+		def multiple_choice?
+			self.vote_type == 'multiple_choice'
 		end
 
 
@@ -33,34 +37,35 @@ module SwellSocial
 
 
 		def update_parent_caches( args={} )
-			if self.parent_obj.respond_to?( :cached_vote_count )
 
-				if Vote.by_object( self.parent_obj ).count == 0
-					score = 0
-				else
-					score = Vote.by_object( self.parent_obj ).up.count / Vote.by_object( self.parent_obj ).count
+			parent_obj_list = [self.parent_obj]
+
+			# if parent_obj was changed (and not during creation)
+			if ( self.user.previous_changes[:parent_obj_id] || self.user.previous_changes[:parent_obj_type] ).present? && self.user.previous_changes[:created_at].blank?
+
+				old_parent_obj_type = self.user.previous_changes[:parent_obj_type].try(:first) || self.user.parent_obj_type
+				old_parent_obj_id = self.user.previous_changes[:parent_obj_id].try(:first) || self.user.parent_obj_id
+
+				old_parent_obj = old_parent_obj_type.constantize.where( id: old_parent_obj_id ).first
+
+				parent_obj_list << old_parent_obj if old_parent_obj.present?
+
+			end
+
+			parent_obj_list.each do |parent_obj|
+
+				if parent_obj.respond_to?( :cached_vote_count )
+
+					upvotes = Vote.by_object( parent_obj ).up.count
+					downvotes = Vote.by_object( parent_obj ).down.count
+					totalvotes = upvotes + downvotes
+
+					score = upvotes.to_f
+					score = upvotes.to_f / totalvotes if totalvotes > 0
+
+					parent_obj.update( cached_vote_count: totalvotes, cached_vote_score: score, cached_downvote_count: downvotes, cached_upvote_count: upvotes )
+
 				end
-
-				updates = { cached_vote_count: Vote.by_object( self.parent_obj ).count, cached_vote_score: score }
-
-				if args[:dir] == 'up'
-					# we're flipping, so remove old downvote
-					updates.merge!( cached_downvote_count: parent_obj.cached_downvote_count - 1 )
-				elsif args[:dir] == 'down'
-					# flipping to down, remove old upvote
-					updates.merge!( cached_upvote_count: parent_obj.cached_upvote_count - 1 )
-				end
-
-				if not( self.persisted? )
-					# vote was deleted, decrement appropriate count
-					if self.up?
-						updates.merge!( cached_upvote_count: parent_obj.cached_upvote_count - 1 )
-					else
-						updates.merge!( cached_downvote_count: parent_obj.cached_downvote_count - 1 )
-					end
-				end
-
-				self.parent_obj.update( updates )	
 
 			end
 		end

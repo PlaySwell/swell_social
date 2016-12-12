@@ -8,16 +8,16 @@
 		= time_ago_in_words( comment.created_at )
 		ago
 		.content{ style: 'padding: 1em;' }
-			- if comment.parent.present?
+			- if comment.reply?
 				.quoted
 					.quote-head
 						In reply to:
-						%a{ href: profile_path( comment.parent.user ) }
-							= comment.parent.user.avatar_tag( width: 16 )
-							= comment.parent.user
+						%a{ href: profile_path( comment.reply_to.user ) }
+							= comment.reply_to.user.avatar_tag( width: 16 )
+							= comment.reply_to.user
 					.quote-body
-						- if comment.parent.active?
-							= raw comment.parent.content
+						- if comment.reply_to.active?
+							= raw comment.reply_to.content
 						- else
 							&lt;REDACTED&gt;
 			- if comment.content
